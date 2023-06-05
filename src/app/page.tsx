@@ -4,10 +4,7 @@ import { useState, type ChangeEvent } from "react";
 import styles from "./page.module.css";
 import { createCypher, cypherEncrypt, getAlphabetIndex } from "@/utils/cypher";
 import Letter from "./components/Letter";
-
-function Word(props) {
-  return <span className={styles.word}>{props.children}</span>;
-}
+import Word from "./components/Word";
 
 function focusNextLetter(currentId) {
   const nextNumber = parseInt(currentId.split("-")[1], 10) + 1;
