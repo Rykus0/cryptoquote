@@ -1,95 +1,111 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+
+import { useState, type ChangeEvent } from "react";
+import styles from "./page.module.css";
+import { createCypher, cypherEncrypt, getAlphabetIndex } from "@/utils/cypher";
+
+function Letter(props) {
+  const { char, id } = props;
+  const isAlpha = getAlphabetIndex(char) >= 0;
+
+  return (
+    <span className={styles.letter}>
+      <input
+        id={id}
+        size={1}
+        maxLength={1}
+        className={styles.letterInput}
+        name={char}
+        onChange={props.onChange}
+        value={isAlpha ? props.value : char}
+        readOnly={!isAlpha}
+        tabIndex={isAlpha ? 0 : -1}
+      />
+      <label htmlFor={id} className={styles.letterLabel}>
+        {char}
+      </label>
+    </span>
+  );
+}
+
+function Word(props) {
+  return <span className={styles.word}>{props.children}</span>;
+}
+
+function focusNextLetter(currentId) {
+  const nextNumber = parseInt(currentId.split("-")[1], 10) + 1;
+  const nextId = `letter-${nextNumber}`;
+  const nextInput = document.getElementById(nextId) as HTMLInputElement;
+
+  if (nextInput) {
+    if (nextInput.value || nextInput.hasAttribute("readonly")) {
+      focusNextLetter(nextId);
+    } else {
+      nextInput.focus();
+    }
+  }
+}
 
 export default function Home() {
+  const [cypher, setCypher] = useState([]);
+  const [encryptedQuote, setEncryptedQuote] = useState("");
+  const [encryptedAuthor, setEncryptedAuthor] = useState("");
+  const [answerMap, setAnswerMap] = useState({});
+  const quote = "That's one small step for a man, a giant leap for mankind.";
+  const author = "Neil Armstrong";
+
+  function restart() {
+    const c = createCypher();
+    setCypher(c);
+    setEncryptedQuote(cypherEncrypt(quote, c));
+    setEncryptedAuthor(cypherEncrypt(author, c));
+    setAnswerMap(
+      c.reduce((accumulator, letter) => {
+        console.log(letter, accumulator);
+        return { ...accumulator, [letter]: "" };
+      }),
+      {}
+    );
+  }
+
+  function updateAnswer(e: ChangeEvent<HTMLInputElement>) {
+    const name = e.target.name;
+    const val = e.target.value;
+
+    setAnswerMap((prev) => {
+      return {
+        ...prev,
+        [name]: val.toUpperCase(),
+      };
+    });
+
+    // Do this after the update goes through
+    if (val) {
+      focusNextLetter(e.target.id);
+    }
+  }
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <main>
+      <h1>Cryptoquote</h1>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+      <button onClick={restart}>Start over</button>
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div>
+        {encryptedQuote.split(/\s+/).map((word) => (
+          <Word>
+            {word.split("").map((char: string, i: number) => (
+              <Letter
+                key={`${char}-${i}`}
+                id={`letter-${i}`}
+                char={char}
+                onChange={updateAnswer}
+                value={answerMap[char]}
+              />
+            ))}
+          </Word>
+        ))}
       </div>
     </main>
-  )
+  );
 }
