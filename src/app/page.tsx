@@ -6,18 +6,45 @@ import { createCypher, cypherEncrypt, getAlphabetIndex } from "@/utils/cypher";
 import Letter from "./components/Letter";
 import Word from "./components/Word";
 
+const ID_DELIM = ":";
+
 function focusNextLetter(currentId: string) {
-  const nextNumber = parseInt(currentId.split("-")[1], 10) + 1;
-  const nextId = `letter-${nextNumber}`;
-  const nextInput = document.getElementById(nextId) as HTMLInputElement;
+  const nextInput = getNextEmptyLetter(currentId);
 
   if (nextInput) {
-    if (nextInput.value || nextInput.hasAttribute("readonly")) {
-      focusNextLetter(nextId);
-    } else {
-      nextInput.focus();
-    }
+    nextInput.focus();
   }
+}
+
+function createLetterId(wordIdx: number, letterIdx: number) {
+  return ["letter", wordIdx, letterIdx].join(ID_DELIM);
+}
+
+function getNextEmptyLetter(letterId: string) {
+  const { wordIdx, letterIdx } = parseLetterId(letterId);
+  const nextId = createLetterId(wordIdx, letterIdx + 1);
+
+  const nextEl = document.getElementById(nextId) as HTMLInputElement;
+  if (nextEl) {
+    if (nextEl.value || nextEl.hasAttribute("readonly")) {
+      return getNextEmptyLetter(nextId);
+    } else {
+      return nextEl;
+    }
+  } else if (letterIdx === -1) {
+    return null;
+  } else {
+    return getNextEmptyLetter(createLetterId(wordIdx + 1, -1));
+  }
+}
+
+function parseLetterId(letterId: string) {
+  const [label, wordIdx, letterIdx] = letterId.split(ID_DELIM);
+  return {
+    label,
+    wordIdx: parseInt(wordIdx, 10),
+    letterIdx: parseInt(letterIdx, 10),
+  };
 }
 
 export default function Home() {
@@ -26,6 +53,8 @@ export default function Home() {
   const [encryptedAuthor, setEncryptedAuthor] = useState("");
   const [answerMap, setAnswerMap] = useState({});
   const [currentLetter, setCurrentLetter] = useState("");
+  const [currentIdx, setCurrentIdx] = useState();
+
   const quote = "That's one small step for a man, a giant leap for mankind.";
   const author = "Neil Armstrong";
 
@@ -35,10 +64,7 @@ export default function Home() {
     setEncryptedQuote(cypherEncrypt(quote, c));
     setEncryptedAuthor(cypherEncrypt(author, c));
     setAnswerMap(
-      c.reduce((accumulator, letter) => {
-        console.log(letter, accumulator);
-        return { ...accumulator, [letter]: "" };
-      }),
+      c.reduce((accumulator, letter) => ({ ...accumulator, [letter]: "" })),
       {}
     );
   }
@@ -56,7 +82,7 @@ export default function Home() {
 
     // Do this after the update goes through
     if (val) {
-      focusNextLetter(e.target.id);
+      window.requestAnimationFrame(() => focusNextLetter(e.target.id));
     }
   }
 
@@ -71,12 +97,12 @@ export default function Home() {
       <button onClick={restart}>Start over</button>
 
       <div className={styles.quote}>
-        {encryptedQuote.split(/\s+/).map((word) => (
-          <Word key={word}>
-            {word.split("").map((char: string, i: number) => (
+        {encryptedQuote.split(/\s+/).map((word: string, wordIdx: number) => (
+          <Word key={`word-${word}-${wordIdx}`}>
+            {word.split("").map((char: string, charIdx: number) => (
               <Letter
-                key={`${char}-${i}`}
-                id={`letter-${i}`}
+                key={createLetterId(wordIdx, charIdx)}
+                id={createLetterId(wordIdx, charIdx)}
                 char={char}
                 onChange={updateAnswer}
                 onFocus={focusLetter}
