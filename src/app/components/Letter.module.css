@@ -15,6 +15,7 @@
 }
 
 .letterInput:read-only {
+  background: none;
   border: 0;
 }
 
