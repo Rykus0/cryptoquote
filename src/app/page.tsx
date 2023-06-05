@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ChangeEvent } from "react";
+import { useState, type ChangeEvent, type FocusEvent } from "react";
 import styles from "./page.module.css";
 import { createCypher, cypherEncrypt, getAlphabetIndex } from "@/utils/cypher";
 import Letter from "./components/Letter";
@@ -25,6 +25,7 @@ export default function Home() {
   const [encryptedQuote, setEncryptedQuote] = useState("");
   const [encryptedAuthor, setEncryptedAuthor] = useState("");
   const [answerMap, setAnswerMap] = useState({});
+  const [currentLetter, setCurrentLetter] = useState("");
   const quote = "That's one small step for a man, a giant leap for mankind.";
   const author = "Neil Armstrong";
 
@@ -59,6 +60,10 @@ export default function Home() {
     }
   }
 
+  function focusLetter(e: FocusEvent<HTMLInputElement>) {
+    setCurrentLetter(e.target.name);
+  }
+
   return (
     <main>
       <h1>Cryptoquote</h1>
@@ -67,13 +72,15 @@ export default function Home() {
 
       <div className={styles.quote}>
         {encryptedQuote.split(/\s+/).map((word) => (
-          <Word>
+          <Word key={word}>
             {word.split("").map((char: string, i: number) => (
               <Letter
                 key={`${char}-${i}`}
                 id={`letter-${i}`}
                 char={char}
                 onChange={updateAnswer}
+                onFocus={focusLetter}
+                focused={currentLetter === char}
                 value={answerMap[char]}
               />
             ))}

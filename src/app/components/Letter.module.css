@@ -4,6 +4,12 @@
   align-items: center;
   justify-content: center;
   min-width: 1em;
+  padding: 1px;
+}
+
+.focusedLetter {
+  composes: letter;
+  background: lime;
 }
 
 .letter + .letter {
@@ -12,6 +18,7 @@
 
 .letterInput {
   width: 1em;
+  text-align: center;
 }
 
 .letterInput:read-only {
