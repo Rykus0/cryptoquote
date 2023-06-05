@@ -3,30 +3,7 @@
 import { useState, type ChangeEvent } from "react";
 import styles from "./page.module.css";
 import { createCypher, cypherEncrypt, getAlphabetIndex } from "@/utils/cypher";
-
-function Letter(props) {
-  const { char, id } = props;
-  const isAlpha = getAlphabetIndex(char) >= 0;
-
-  return (
-    <span className={styles.letter}>
-      <input
-        id={id}
-        size={1}
-        maxLength={1}
-        className={styles.letterInput}
-        name={char}
-        onChange={props.onChange}
-        value={isAlpha ? props.value : char}
-        readOnly={!isAlpha}
-        tabIndex={isAlpha ? 0 : -1}
-      />
-      <label htmlFor={id} className={styles.letterLabel}>
-        {char}
-      </label>
-    </span>
-  );
-}
+import Letter from "./components/Letter";
 
 function Word(props) {
   return <span className={styles.word}>{props.children}</span>;

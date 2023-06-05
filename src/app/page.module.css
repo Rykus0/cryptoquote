@@ -5,27 +5,3 @@
 .word + .word {
   margin-inline-start: 1em;
 }
-
-.letter {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-width: 1em;
-}
-
-.letter + .letter {
-  margin-inline-start: 1px;
-}
-
-.letterInput {
-  width: 1em;
-}
-
-.letterInput:read-only {
-  border: 0;
-}
-
-.letterLabel {
-  text-transform: uppercase;
-}
