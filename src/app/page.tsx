@@ -65,7 +65,7 @@ export default function Home() {
 
       <button onClick={restart}>Start over</button>
 
-      <div>
+      <div className={styles.quote}>
         {encryptedQuote.split(/\s+/).map((word) => (
           <Word>
             {word.split("").map((char: string, i: number) => (

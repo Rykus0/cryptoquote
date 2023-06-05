@@ -1,7 +1,0 @@
-.word {
-  white-space: nowrap;
-}
-
-.word + .word {
-  margin-inline-start: 1em;
-}
