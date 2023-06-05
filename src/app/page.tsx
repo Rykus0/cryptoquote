@@ -6,7 +6,7 @@ import { createCypher, cypherEncrypt, getAlphabetIndex } from "@/utils/cypher";
 import Letter from "./components/Letter";
 import Word from "./components/Word";
 
-function focusNextLetter(currentId) {
+function focusNextLetter(currentId: string) {
   const nextNumber = parseInt(currentId.split("-")[1], 10) + 1;
   const nextId = `letter-${nextNumber}`;
   const nextInput = document.getElementById(nextId) as HTMLInputElement;
@@ -46,7 +46,7 @@ export default function Home() {
     const name = e.target.name;
     const val = e.target.value;
 
-    setAnswerMap((prev) => {
+    setAnswerMap((prev: Object) => {
       return {
         ...prev,
         [name]: val.toUpperCase(),
