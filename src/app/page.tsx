@@ -67,6 +67,7 @@ export default function Home() {
       c.reduce((accumulator, letter) => ({ ...accumulator, [letter]: "" })),
       {}
     );
+    setCurrentLetter("");
   }
 
   function updateAnswer(e: ChangeEvent<HTMLInputElement>) {
