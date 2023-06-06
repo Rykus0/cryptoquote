@@ -108,7 +108,7 @@ export default function Home() {
     <main>
       <h1>Cryptoquote</h1>
 
-      <button onClick={newGame}>Start over</button>
+      <button onClick={newGame}>New game</button>
 
       <div className={styles.quote}>
         {state.loading ? (
