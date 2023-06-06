@@ -5,6 +5,7 @@ import styles from "./Letter.module.css";
 interface LetterProps {
   char: string;
   id: string;
+  value?: string;
   focused?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: FocusEvent<HTMLInputElement>) => void;

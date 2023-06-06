@@ -1,10 +1,28 @@
 "use client";
 
-import { useState, type ChangeEvent, type FocusEvent } from "react";
+import {
+  useReducer,
+  type ChangeEvent,
+  type FocusEvent,
+  type Reducer,
+} from "react";
 import styles from "./page.module.css";
-import { createCypher, cypherEncrypt, getAlphabetIndex } from "@/utils/cypher";
 import Letter from "./components/Letter";
 import Word from "./components/Word";
+import reducer, {
+  initialState,
+  ActionType,
+  type State,
+  type Action,
+} from "./state/reducer";
+
+// TODO
+// - State Persistence
+// - Timer
+// - Letter frequency
+// - Give up (reveal all)
+// - Hint (reveal letter)
+// - Win condition
 
 const ID_DELIM = ":";
 
@@ -47,72 +65,73 @@ function parseLetterId(letterId: string) {
   };
 }
 
+async function getQuote() {
+  const response = await fetch("https://api.quotable.io/random");
+  const data = await response.json();
+
+  return {
+    quote: data.content,
+    author: data.author,
+    // tags: data.tags,
+  };
+}
+
 export default function Home() {
-  const [cypher, setCypher] = useState([]);
-  const [encryptedQuote, setEncryptedQuote] = useState("");
-  const [encryptedAuthor, setEncryptedAuthor] = useState("");
-  const [answerMap, setAnswerMap] = useState({});
-  const [currentLetter, setCurrentLetter] = useState("");
-  const [currentIdx, setCurrentIdx] = useState();
+  const [state, dispatch] = useReducer<Reducer<State, Action>>(
+    reducer,
+    initialState
+  );
 
-  const quote = "That's one small step for a man, a giant leap for mankind.";
-  const author = "Neil Armstrong";
-
-  function restart() {
-    const c = createCypher();
-    setCypher(c);
-    setEncryptedQuote(cypherEncrypt(quote, c));
-    setEncryptedAuthor(cypherEncrypt(author, c));
-    setAnswerMap(
-      c.reduce((accumulator, letter) => ({ ...accumulator, [letter]: "" })),
-      {}
-    );
-    setCurrentLetter("");
+  async function newGame() {
+    dispatch({ type: ActionType.Loading });
+    const { quote, author } = await getQuote();
+    dispatch({ type: ActionType.NewGame, payload: { quote, author } });
   }
 
   function updateAnswer(e: ChangeEvent<HTMLInputElement>) {
-    const name = e.target.name;
-    const val = e.target.value;
-
-    setAnswerMap((prev: Object) => {
-      return {
-        ...prev,
-        [name]: val.toUpperCase(),
-      };
+    dispatch({
+      type: ActionType.SetAnswer,
+      payload: { letter: e.target.name, value: e.target.value },
     });
 
     // Do this after the update goes through
-    if (val) {
+    if (e.target.value) {
       window.requestAnimationFrame(() => focusNextLetter(e.target.id));
     }
   }
 
   function focusLetter(e: FocusEvent<HTMLInputElement>) {
-    setCurrentLetter(e.target.name);
+    dispatch({ type: ActionType.SetCurrentLetter, payload: e.target.name });
   }
 
   return (
     <main>
       <h1>Cryptoquote</h1>
 
-      <button onClick={restart}>Start over</button>
+      <button onClick={newGame}>Start over</button>
 
       <div className={styles.quote}>
-        {encryptedQuote.split(/\s+/).map((word: string, wordIdx: number) => (
-          <Word key={`word-${word}-${wordIdx}`}>
-            {word.split("").map((char: string, charIdx: number) => (
-              <Letter
-                key={createLetterId(wordIdx, charIdx)}
-                id={createLetterId(wordIdx, charIdx)}
-                char={char}
-                onChange={updateAnswer}
-                onFocus={focusLetter}
-                focused={currentLetter === char}
-                value={answerMap[char]}
-              />
-            ))}
-          </Word>
-        ))}
+        {state.loading ? (
+          <span>loading...</span>
+        ) : (
+          state.encryptedQuote
+            .split(/\s+/)
+            .map((word: string, wordIdx: number) => (
+              <Word key={`word-${word}-${wordIdx}`}>
+                {word.split("").map((char: string, charIdx: number) => (
+                  <Letter
+                    key={createLetterId(wordIdx, charIdx)}
+                    id={createLetterId(wordIdx, charIdx)}
+                    char={char}
+                    onChange={updateAnswer}
+                    onFocus={focusLetter}
+                    focused={state.currentLetter === char}
+                    value={state.answerMap[char]}
+                  />
+                ))}
+              </Word>
+            ))
+        )}
       </div>
     </main>
   );
