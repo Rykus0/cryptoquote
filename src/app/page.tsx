@@ -24,6 +24,8 @@ import reducer, {
 // - Hint (reveal letter)
 // - Win condition
 // - Loading state - visual
+// -- random placeholder elements of random length
+// - Improve visuals
 // - Only one of each letter can be entered
 // -- should be solved by reversing the answer map
 
