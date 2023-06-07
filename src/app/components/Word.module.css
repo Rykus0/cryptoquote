@@ -1,4 +1,4 @@
 .word {
-  background: #ccc;
+  background: var(--color-word-bg, #ccc);
   padding: 2px;
 }

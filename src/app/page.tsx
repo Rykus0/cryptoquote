@@ -23,6 +23,9 @@ import reducer, {
 // - Give up (reveal all)
 // - Hint (reveal letter)
 // - Win condition
+// - Loading state - visual
+// - Only one of each letter can be entered
+// -- should be solved by reversing the answer map
 
 const ID_DELIM = ":";
 

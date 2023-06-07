@@ -9,7 +9,7 @@
 
 .focusedLetter {
   composes: letter;
-  background: lime;
+  background: var(--color-highlight-bg);
 }
 
 .letter + .letter {
