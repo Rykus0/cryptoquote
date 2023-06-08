@@ -19,6 +19,7 @@
 .letterInput {
   width: 1em;
   text-align: center;
+  text-transform: uppercase;
 }
 
 .letterInput:read-only {
