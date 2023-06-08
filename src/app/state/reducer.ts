@@ -5,6 +5,16 @@ import {
   type Cypher,
 } from "@/utils/cypher";
 
+export type State = {
+  cypher: Cypher;
+  answerCypher: Cypher;
+  quote: string;
+  encryptedQuote: string;
+  currentLetter: string;
+  loading?: boolean;
+  win?: boolean;
+};
+
 export const initialState: State = {
   cypher: generateCypher(),
   answerCypher: new Map(),
@@ -15,15 +25,13 @@ export const initialState: State = {
   win: false,
 };
 
-export type State = {
-  cypher: Cypher;
-  answerCypher: Cypher;
-  quote: string;
-  encryptedQuote: string;
-  currentLetter: string;
-  loading?: boolean;
-  win?: boolean;
-};
+export enum ActionType {
+  Clear = "clear",
+  NewGame = "newGame",
+  Loading = "loading",
+  SetAnswer = "setAnswer",
+  SetCurrentLetter = "setCurrentLetter",
+}
 
 export type Action =
   | {
@@ -37,14 +45,6 @@ export type Action =
     }
   | { type: ActionType.Clear }
   | { type: ActionType.SetCurrentLetter; payload: string };
-
-export enum ActionType {
-  Clear = "clear",
-  NewGame = "newGame",
-  Loading = "loading",
-  SetAnswer = "setAnswer",
-  SetCurrentLetter = "setCurrentLetter",
-}
 
 export default function reducer(state: State, action: Action): State {
   switch (action.type) {
