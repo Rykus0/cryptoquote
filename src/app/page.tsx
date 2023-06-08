@@ -22,16 +22,11 @@ import reducer, {
 // - Letter frequency
 // - Give up (reveal all)
 // - Hint (reveal letter)
-// - Win condition
-// -- decrypted answer equals quote
-// - Loading state - visual
+// - Loading state - improvement
 // -- random placeholder elements of random length
-// - Improve visuals
+// - Improve overall visuals
+// - Improve win condition visuals
 // - improve focus management
-
-// state improvement
-// answerCypher: Map<string, string>
-// win when applyCypher(encryptedQuote, answerCypher) === quote
 
 const ID_DELIM = ":";
 
