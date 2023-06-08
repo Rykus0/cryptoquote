@@ -23,9 +23,15 @@ import reducer, {
 // - Give up (reveal all)
 // - Hint (reveal letter)
 // - Win condition
+// -- decrypted answer equals quote
 // - Loading state - visual
 // -- random placeholder elements of random length
 // - Improve visuals
+// - improve focus management
+
+// state improvement
+// answerCypher: Map<string, string>
+// win when applyCypher(encryptedQuote, answerCypher) === quote
 
 const ID_DELIM = ":";
 
@@ -129,7 +135,7 @@ export default function Home() {
                     onChange={updateAnswer}
                     onFocus={focusLetter}
                     highlighted={state.currentLetter === char}
-                    value={state.answerMap[char]}
+                    value={state.answerCypher.get(char)}
                   />
                 ))}
               </Word>

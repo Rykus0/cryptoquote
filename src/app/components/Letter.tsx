@@ -1,5 +1,4 @@
 import { type ChangeEvent, type FocusEvent } from "react";
-import { getAlphabetIndex } from "@/utils/cypher";
 import styles from "./Letter.module.css";
 
 interface LetterProps {
@@ -13,7 +12,7 @@ interface LetterProps {
 
 export default function Letter(props: LetterProps) {
   const { char, id } = props;
-  const isAlpha = getAlphabetIndex(char) >= 0;
+  const isAlpha = /[a-zA-Z]/.test(char);
 
   return (
     <span className={props.highlighted ? styles.focusedLetter : styles.letter}>

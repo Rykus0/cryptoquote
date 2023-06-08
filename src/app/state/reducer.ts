@@ -1,23 +1,24 @@
 import {
-  createCypher,
-  cypherEncrypt,
-  ALPHABET,
+  applyCypher,
+  generateCypher,
+  clearCypherValue,
   type Cypher,
 } from "@/utils/cypher";
-import getKeyByValue from "@/utils/getKeyByValue";
 
 export const initialState: State = {
-  cypher: [],
+  cypher: generateCypher(),
+  answerCypher: new Map(),
+  quote: "",
   encryptedQuote: "",
-  answerMap: {},
   currentLetter: "",
   loading: false,
 };
 
 export type State = {
   cypher: Cypher;
+  answerCypher: Cypher;
+  quote: string;
   encryptedQuote: string;
-  answerMap: Record<string, string>;
   currentLetter: string;
   loading?: boolean;
 };
@@ -44,24 +45,15 @@ export enum ActionType {
 export default function reducer(state: State, action: Action): State {
   switch (action.type) {
     case ActionType.NewGame:
-      const cypher = createCypher();
-
-      const quote =
-        action.payload.quote.toLocaleLowerCase("en-US") +
-        " - " +
-        action.payload.author.toLocaleLowerCase("en-US");
+      const cypher = generateCypher();
+      const quote = formatQuote(action.payload.quote, action.payload.author);
 
       return {
         ...state,
         cypher: cypher,
-        encryptedQuote: cypherEncrypt(quote, cypher),
-        answerMap: ALPHABET.reduce(
-          (accumulator, letter) => ({
-            ...accumulator,
-            [letter]: "",
-          }),
-          {}
-        ),
+        answerCypher: new Map(Array.from(cypher.values()).map((v) => [v, ""])),
+        quote: quote,
+        encryptedQuote: applyCypher(quote, cypher),
         currentLetter: "",
         loading: false,
       };
@@ -73,15 +65,14 @@ export default function reducer(state: State, action: Action): State {
       };
 
     case ActionType.SetAnswer:
-      const dupKey = getKeyByValue(state.answerMap, action.payload.decoded);
+      const newAnswer = new Map(state.answerCypher);
+
+      clearCypherValue(newAnswer, action.payload.decoded);
+      newAnswer.set(action.payload.encoded, action.payload.decoded);
 
       return {
         ...state,
-        answerMap: {
-          ...state.answerMap,
-          [action.payload.encoded]: action.payload.decoded,
-          ...(dupKey && { [dupKey]: "" }),
-        },
+        answerCypher: newAnswer,
       };
 
     case ActionType.SetCurrentLetter:
@@ -109,4 +100,10 @@ export default function reducer(state: State, action: Action): State {
   // --- No: Are there blanks?
   // ---- Yes: Focus next letter
   // ---- No: display incorrect message
+}
+
+function formatQuote(quote: string, author: string) {
+  return (
+    quote.toLocaleLowerCase("en-US") + " - " + author.toLocaleLowerCase("en-US")
+  );
 }

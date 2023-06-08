@@ -1,6 +1,6 @@
 import shuffle from "./shuffle";
 
-export type Cypher = string[];
+export type Cypher = Map<string, string>;
 
 export const ALPHABET = [
   "a",
@@ -31,40 +31,39 @@ export const ALPHABET = [
   "z",
 ];
 
-export function createCypher(): Cypher {
-  return shuffle(ALPHABET);
+export function generateCypher(): Cypher {
+  const randomizedAlphabet = shuffle(ALPHABET);
+
+  return new Map(zip(ALPHABET, randomizedAlphabet));
 }
 
-export function cypherEncrypt(source: string, cypher: Cypher) {
+function zip<T, U>(a: T[], b: U[]): [T, U][] {
+  return a.map((item, index) => [item, b[index]]);
+}
+
+export function applyCypher(source: string, cypher: Cypher) {
   return source
     .split("")
     .map((character) => {
-      const index = getAlphabetIndex(character.toLowerCase());
-
-      if (index >= 0) {
-        return cypher[index];
-      }
-
-      return character;
+      return cypher.get(character) ?? character;
     })
     .join("");
 }
 
-export function cypherDecrypt(encrypted: string, cypher: Cypher) {
-  return encrypted
-    .split("")
-    .map((character) => {
-      const index = cypher.indexOf(character.toLowerCase());
-
-      if (index >= 0) {
-        return ALPHABET[index];
-      }
-
-      return character;
-    })
-    .join("");
+// TODO: only clears the first occurance
+export function clearCypherValue(cypher: Cypher, value: string) {
+  const dupKey = getKeyByValue(cypher, value);
+  if (dupKey) {
+    cypher.set(dupKey, "");
+  }
 }
 
-export function getAlphabetIndex(char: string) {
-  return ALPHABET.indexOf(char.toLowerCase());
+function getKeyByValue(cypher: Cypher, searchValue: string) {
+  cypher.forEach((value, key) => {
+    if (value === searchValue) {
+      return key;
+    }
+  });
+
+  return null;
 }
