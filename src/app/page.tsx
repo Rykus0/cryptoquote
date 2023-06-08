@@ -7,14 +7,14 @@ import {
   type Reducer,
 } from "react";
 import styles from "./page.module.css";
-import Letter from "./components/Letter";
-import Word from "./components/Word";
+import Letter from "@/app/components/Letter";
+import Word from "@/app/components/Word";
 import reducer, {
   initialState,
   ActionType,
   type State,
   type Action,
-} from "./state/reducer";
+} from "@/app/state/reducer";
 
 // TODO
 // - State Persistence
@@ -26,8 +26,6 @@ import reducer, {
 // - Loading state - visual
 // -- random placeholder elements of random length
 // - Improve visuals
-// - Only one of each letter can be entered
-// -- should be solved by reversing the answer map
 
 const ID_DELIM = ":";
 
@@ -96,7 +94,7 @@ export default function Home() {
   function updateAnswer(e: ChangeEvent<HTMLInputElement>) {
     dispatch({
       type: ActionType.SetAnswer,
-      payload: { letter: e.target.name, value: e.target.value },
+      payload: { encoded: e.target.name, decoded: e.target.value },
     });
 
     // Do this after the update goes through

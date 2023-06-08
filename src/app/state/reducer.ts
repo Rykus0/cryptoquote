@@ -1,6 +1,13 @@
-import { createCypher, cypherEncrypt } from "@/utils/cypher";
+import {
+  createCypher,
+  cypherEncrypt,
+  ALPHABET,
+  type Cypher,
+} from "@/utils/cypher";
+import getKeyByValue from "@/utils/getKeyByValue";
 
 export const initialState: State = {
+  cypher: [],
   encryptedQuote: "",
   answerMap: {},
   currentLetter: "",
@@ -8,6 +15,7 @@ export const initialState: State = {
 };
 
 export type State = {
+  cypher: Cypher;
   encryptedQuote: string;
   answerMap: Record<string, string>;
   currentLetter: string;
@@ -20,7 +28,10 @@ export type Action =
       payload: { quote: string; author: string };
     }
   | { type: ActionType.Loading }
-  | { type: ActionType.SetAnswer; payload: { letter: string; value: string } }
+  | {
+      type: ActionType.SetAnswer;
+      payload: { encoded: string; decoded: string };
+    }
   | { type: ActionType.SetCurrentLetter; payload: string };
 
 export enum ActionType {
@@ -33,17 +44,24 @@ export enum ActionType {
 export default function reducer(state: State, action: Action): State {
   switch (action.type) {
     case ActionType.NewGame:
-      const c = createCypher();
+      const cypher = createCypher();
 
-      const quote = action.payload.quote + " - " + action.payload.author;
+      const quote =
+        action.payload.quote.toLocaleLowerCase("en-US") +
+        " - " +
+        action.payload.author.toLocaleLowerCase("en-US");
 
       return {
         ...state,
-        encryptedQuote: cypherEncrypt(quote, c),
-        answerMap: c.reduce((accumulator, letter) => ({
-          ...accumulator,
-          [letter]: "",
-        })),
+        cypher: cypher,
+        encryptedQuote: cypherEncrypt(quote, cypher),
+        answerMap: ALPHABET.reduce(
+          (accumulator, letter) => ({
+            ...accumulator,
+            [letter]: "",
+          }),
+          {}
+        ),
         currentLetter: "",
         loading: false,
       };
@@ -55,11 +73,14 @@ export default function reducer(state: State, action: Action): State {
       };
 
     case ActionType.SetAnswer:
+      const dupKey = getKeyByValue(state.answerMap, action.payload.decoded);
+
       return {
         ...state,
         answerMap: {
           ...state.answerMap,
-          [action.payload.letter]: action.payload.value.toUpperCase(),
+          [action.payload.encoded]: action.payload.decoded,
+          ...(dupKey && { [dupKey]: "" }),
         },
       };
 

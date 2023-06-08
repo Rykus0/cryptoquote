@@ -1,6 +1,8 @@
 import shuffle from "./shuffle";
 
-const ALPHABET = [
+export type Cypher = string[];
+
+export const ALPHABET = [
   "a",
   "b",
   "c",
@@ -29,18 +31,33 @@ const ALPHABET = [
   "z",
 ];
 
-export function createCypher() {
+export function createCypher(): Cypher {
   return shuffle(ALPHABET);
 }
 
-export function cypherEncrypt(source: string, cypher: string[]) {
+export function cypherEncrypt(source: string, cypher: Cypher) {
   return source
     .split("")
     .map((character) => {
-      const index = getAlphabetIndex(character);
+      const index = getAlphabetIndex(character.toLowerCase());
 
       if (index >= 0) {
         return cypher[index];
+      }
+
+      return character;
+    })
+    .join("");
+}
+
+export function cypherDecrypt(encrypted: string, cypher: Cypher) {
+  return encrypted
+    .split("")
+    .map((character) => {
+      const index = cypher.indexOf(character.toLowerCase());
+
+      if (index >= 0) {
+        return ALPHABET[index];
       }
 
       return character;
