@@ -6,7 +6,7 @@ interface LetterProps {
   char: string;
   id: string;
   value?: string;
-  focused?: boolean;
+  highlighted?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
 }
@@ -16,7 +16,7 @@ export default function Letter(props: LetterProps) {
   const isAlpha = getAlphabetIndex(char) >= 0;
 
   return (
-    <span className={props.focused ? styles.focusedLetter : styles.letter}>
+    <span className={props.highlighted ? styles.focusedLetter : styles.letter}>
       {isAlpha ? (
         <>
           <input

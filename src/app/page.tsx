@@ -128,7 +128,7 @@ export default function Home() {
                     char={char}
                     onChange={updateAnswer}
                     onFocus={focusLetter}
-                    focused={state.currentLetter === char}
+                    highlighted={state.currentLetter === char}
                     value={state.answerMap[char]}
                   />
                 ))}
