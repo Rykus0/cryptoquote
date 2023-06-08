@@ -92,25 +92,6 @@ export default function reducer(state: State, action: Action): State {
         currentLetter: action.payload,
       };
   }
-
-  return state;
-
-  // throw new Error(`Unhandled action type: ${action.type}`);
-
-  // TODO: Actions
-  // - New game
-  // -- Create cypher
-  // -- Encrypt quote
-  // - Restart
-  // -- Clear answer
-  // -- Focus to first letter (?)
-  // - Guess letter: { type: 'guess', letter: 'a', cypherLetter: 'b' }
-  // -- Update answer
-  // -- Check if won: answer cypher == cypher
-  // --- Yes: display win message
-  // --- No: Are there blanks?
-  // ---- Yes: Focus next letter
-  // ---- No: display incorrect message
 }
 
 function formatQuote(quote: string, author: string) {
