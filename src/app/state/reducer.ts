@@ -33,9 +33,11 @@ export type Action =
       type: ActionType.SetAnswer;
       payload: { encoded: string; decoded: string };
     }
+  | { type: ActionType.Clear }
   | { type: ActionType.SetCurrentLetter; payload: string };
 
 export enum ActionType {
+  Clear = "clear",
   NewGame = "newGame",
   Loading = "loading",
   SetAnswer = "setAnswer",
@@ -51,11 +53,17 @@ export default function reducer(state: State, action: Action): State {
       return {
         ...state,
         cypher: cypher,
-        answerCypher: new Map(Array.from(cypher.values()).map((v) => [v, ""])),
+        answerCypher: createEmptyReverseCypher(cypher),
         quote: quote,
         encryptedQuote: applyCypher(quote, cypher),
         currentLetter: "",
         loading: false,
+      };
+
+    case ActionType.Clear:
+      return {
+        ...state,
+        answerCypher: createEmptyReverseCypher(state.cypher),
       };
 
     case ActionType.Loading:
@@ -106,4 +114,8 @@ function formatQuote(quote: string, author: string) {
   return (
     quote.toLocaleLowerCase("en-US") + " - " + author.toLocaleLowerCase("en-US")
   );
+}
+
+function createEmptyReverseCypher(cypher: Cypher) {
+  return new Map(Array.from(cypher.values()).map((v) => [v, ""]));
 }

@@ -97,6 +97,10 @@ export default function Home() {
     dispatch({ type: ActionType.NewGame, payload: { quote, author } });
   }
 
+  function clearBoard() {
+    dispatch({ type: ActionType.Clear });
+  }
+
   function updateAnswer(e: ChangeEvent<HTMLInputElement>) {
     dispatch({
       type: ActionType.SetAnswer,
@@ -118,6 +122,7 @@ export default function Home() {
       <h1>Cryptoquote</h1>
 
       <button onClick={newGame}>New game</button>
+      <button onClick={clearBoard}>Clear</button>
 
       <div className={styles.quote}>
         {state.loading ? (
