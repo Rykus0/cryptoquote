@@ -124,6 +124,8 @@ export default function Home() {
       <button onClick={newGame}>New game</button>
       <button onClick={clearBoard}>Clear</button>
 
+      {state.win && <div>🎉 You Won! 🎉</div>}
+
       <div className={styles.quote}>
         {state.loading ? (
           <span>loading...</span>

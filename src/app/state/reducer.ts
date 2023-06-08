@@ -12,6 +12,7 @@ export const initialState: State = {
   encryptedQuote: "",
   currentLetter: "",
   loading: false,
+  win: false,
 };
 
 export type State = {
@@ -21,6 +22,7 @@ export type State = {
   encryptedQuote: string;
   currentLetter: string;
   loading?: boolean;
+  win?: boolean;
 };
 
 export type Action =
@@ -81,6 +83,7 @@ export default function reducer(state: State, action: Action): State {
       return {
         ...state,
         answerCypher: newAnswer,
+        win: applyCypher(state.encryptedQuote, newAnswer) === state.quote,
       };
 
     case ActionType.SetCurrentLetter:
