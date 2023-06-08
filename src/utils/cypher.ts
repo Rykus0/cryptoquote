@@ -59,11 +59,11 @@ export function clearCypherValue(cypher: Cypher, value: string) {
 }
 
 function getKeyByValue(cypher: Cypher, searchValue: string) {
-  cypher.forEach((value, key) => {
+  for (const [key, value] of cypher.entries()) {
     if (value === searchValue) {
       return key;
     }
-  });
+  }
 
   return null;
 }
