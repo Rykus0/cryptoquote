@@ -10,6 +10,7 @@ export type State = {
   answerCypher: Cypher;
   quote: string;
   encryptedQuote: string;
+  letterFrequency: Map<string, number>;
   currentLetter: string;
   loading?: boolean;
   win?: boolean;
@@ -22,6 +23,7 @@ export const initialState: State = {
   answerCypher: new Map(),
   quote: "",
   encryptedQuote: "",
+  letterFrequency: new Map(),
   currentLetter: "",
   loading: false,
   win: false,
@@ -63,18 +65,24 @@ export default function reducer(state: State, action: Action): State {
         lastTick: action.payload,
       };
 
+    // -------------------------------------
+
     case ActionType.NewGame:
       const cypher = generateCypher();
       const quote = formatQuote(action.payload.quote, action.payload.author);
+      const encrypted = applyCypher(quote, cypher);
 
       return {
         ...initialState,
         cypher: cypher,
         answerCypher: createEmptyReverseCypher(cypher),
         quote: quote,
-        encryptedQuote: applyCypher(quote, cypher),
+        encryptedQuote: encrypted,
+        letterFrequency: getLetterFrequencies(encrypted),
         lastTick: Date.now(),
       };
+
+    // -------------------------------------
 
     case ActionType.Clear:
       return {
@@ -82,11 +90,15 @@ export default function reducer(state: State, action: Action): State {
         answerCypher: createEmptyReverseCypher(state.cypher),
       };
 
+    // -------------------------------------
+
     case ActionType.Loading:
       return {
         ...state,
         loading: true,
       };
+
+    // -------------------------------------
 
     case ActionType.SetAnswer:
       if (state.win) return state;
@@ -102,11 +114,15 @@ export default function reducer(state: State, action: Action): State {
         win: applyCypher(state.encryptedQuote, newAnswer) === state.quote,
       };
 
+    // -------------------------------------
+
     case ActionType.SetCurrentLetter:
       return {
         ...state,
         currentLetter: action.payload,
       };
+
+    // -------------------------------------
   }
 }
 
@@ -118,4 +134,15 @@ function formatQuote(quote: string, author: string) {
 
 function createEmptyReverseCypher(cypher: Cypher) {
   return new Map(Array.from(cypher.values()).map((v) => [v, ""]));
+}
+
+function getLetterFrequencies(quote: string) {
+  return quote.split("").reduce((prev, letter) => {
+    if (prev.has(letter)) {
+      prev.set(letter, prev.get(letter) + 1);
+    } else {
+      prev.set(letter, 1);
+    }
+    return prev;
+  }, new Map<string, number>());
 }

@@ -4,6 +4,7 @@ import styles from "./Letter.module.css";
 interface LetterProps {
   char: string;
   value?: string;
+  occurrences: number;
   highlighted?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
@@ -31,6 +32,9 @@ export default function Letter(props: LetterProps) {
           <label htmlFor={id} className={styles.letterLabel}>
             {char}
           </label>
+          <span aria-label="letter count" className={styles.letterCount}>
+            {props.occurrences}
+          </span>
         </>
       ) : (
         <>

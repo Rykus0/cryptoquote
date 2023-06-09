@@ -21,8 +21,6 @@ import reducer, {
 } from "@/app/state/reducer";
 
 // TODO
-// - Disable inputs/prevent input when game is won
-// - Letter frequency
 // - Give up (reveal all)
 // - Hint (reveal letter)
 // - Loading state - improvement
@@ -40,6 +38,7 @@ import reducer, {
 // - other themes
 // - challenge mode: time limit
 // - help mode: show used and unused letters / letter bank
+// - show/hide letter frequency
 
 // ops stuff
 // - commitlint & husky
@@ -134,6 +133,7 @@ export default function Home() {
                   <Letter
                     key={`letter-${wordIdx}-${charIdx}`}
                     char={char}
+                    occurrences={state.letterFrequency.get(char) || 0}
                     onChange={updateAnswer}
                     onFocus={focusLetter}
                     highlighted={state.currentLetter === char}

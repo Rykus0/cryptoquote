@@ -30,3 +30,7 @@
 .letterLabel {
   text-transform: uppercase;
 }
+
+.letterCount {
+  font-size: .75em;
+}
