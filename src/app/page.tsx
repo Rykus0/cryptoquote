@@ -20,7 +20,7 @@ import reducer, {
 } from "@/app/state/reducer";
 
 // TODO
-// - State Persistence
+// - bug: clear existing letter
 // - Timer (pause when not focused)
 // - Letter frequency
 // - Give up (reveal all)
@@ -30,7 +30,16 @@ import reducer, {
 // - Improve overall visuals
 // - Improve win condition visuals
 // - backspace empty input should focus previous input
+// ^^^^^^^^^^^ MVP ^^^^^^^^^^
 // - display tags and allow filtering by tag
+// - State Persistence
+// - no background for punctuation outside of words
+// - light and dark theme
+// - other themes
+
+// ops stuff
+// - commitlint & husky
+// - component tests
 
 async function getQuote() {
   const response = await fetch("https://api.quotable.io/random");
@@ -61,13 +70,15 @@ export default function Home() {
   }
 
   function updateAnswer(e: ChangeEvent<HTMLInputElement>) {
-    if (/[a-zA-Z]/.test(e.target.value)) {
+    const value = e.target.value;
+
+    if (/[a-zA-Z]/.test(value) || value === "") {
       dispatch({
         type: ActionType.SetAnswer,
-        payload: { encoded: e.target.name, decoded: e.target.value },
+        payload: { encoded: e.target.name, decoded: value },
       });
 
-      if (e.target.value && quoteRef.current) {
+      if (value && quoteRef.current) {
         window.requestAnimationFrame(() =>
           focusNextEmptyInput(quoteRef.current)
         );
