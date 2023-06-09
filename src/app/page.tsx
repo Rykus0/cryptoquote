@@ -22,12 +22,11 @@ import reducer, {
 } from "@/app/state/reducer";
 
 // TODO
-// - Give up (reveal all)
-// - Hint (reveal letter)
 // - Loading state - improvement
 // -- random placeholder elements of random length
-// - Improve overall visuals
+// - Improve quote visuals and typography
 // - Improve win condition visuals
+// - improve control layout and visuals
 // - backspace empty input should focus previous input
 // - fix TS warnings and errors
 // ^^^^^^^^^^^ MVP ^^^^^^^^^^
@@ -36,11 +35,12 @@ import reducer, {
 // - no background for punctuation outside of words
 // - light and dark theme
 // - ability to pause timer - obscure play screen to prevent cheating
-// - other themes
+// - other themes and switcher
 // - challenge mode: time limit
 // - help mode: show used and unused letters / letter bank
 // - show/hide letter frequency
 // - Keep track of past scores and quotes
+// - Hint (reveal letter)
 
 // ops stuff
 // - commitlint & husky
@@ -72,6 +72,10 @@ export default function Home() {
 
   function clearBoard() {
     dispatch({ type: ActionType.Clear });
+  }
+
+  function revealAll() {
+    dispatch({ type: ActionType.GiveUp });
   }
 
   function updateAnswer(e: ChangeEvent<HTMLInputElement>) {
@@ -119,6 +123,7 @@ export default function Home() {
 
       <button onClick={newGame}>New game</button>
       <button onClick={clearBoard}>Clear</button>
+      <button onClick={revealAll}>I give up</button>
       <Timer ms={state.msElapsed} />
 
       {state.win && <div>🎉 You Won! 🎉</div>}

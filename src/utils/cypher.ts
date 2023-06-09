@@ -40,3 +40,9 @@ function getKeyByValue(cypher: Cypher, searchValue: string) {
 
   return null;
 }
+
+export function getReverseCypher(cypher: Cypher) {
+  return new Map(
+    Array.from(cypher.entries()).map(([key, value]) => [value, key])
+  );
+}

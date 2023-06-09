@@ -2,6 +2,7 @@ import {
   applyCypher,
   generateCypher,
   clearCypherValue,
+  getReverseCypher,
   type Cypher,
 } from "@/utils/cypher";
 
@@ -34,6 +35,7 @@ export const initialState: State = {
 export enum ActionType {
   Clear = "clear",
   NewGame = "newGame",
+  GiveUp = "giveUp",
   Loading = "loading",
   SetAnswer = "setAnswer",
   SetCurrentLetter = "setCurrentLetter",
@@ -41,18 +43,20 @@ export enum ActionType {
 }
 
 export type Action =
+  | { type: ActionType.Clear }
   | {
       type: ActionType.NewGame;
       payload: { quote: string; author: string };
     }
+  | { type: ActionType.GiveUp }
   | { type: ActionType.Loading }
   | {
       type: ActionType.SetAnswer;
       payload: { encoded: string; decoded: string };
     }
-  | { type: ActionType.Clear }
   | { type: ActionType.SetCurrentLetter; payload: string }
   | { type: ActionType.Tick; payload: number };
+
 export default function reducer(state: State, action: Action): State {
   switch (action.type) {
     case ActionType.Tick:
@@ -123,7 +127,16 @@ export default function reducer(state: State, action: Action): State {
       };
 
     // -------------------------------------
+
+    case ActionType.GiveUp:
+      return {
+        ...state,
+        answerCypher: getReverseCypher(state.cypher),
+        win: true,
+      };
   }
+
+  return state;
 }
 
 function formatQuote(quote: string, author: string) {
