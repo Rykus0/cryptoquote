@@ -152,7 +152,8 @@ function createEmptyReverseCypher(cypher: Cypher) {
 function getLetterFrequencies(quote: string) {
   return quote.split("").reduce((prev, letter) => {
     if (prev.has(letter)) {
-      prev.set(letter, prev.get(letter) + 1);
+      const count = prev.get(letter) ?? 0;
+      prev.set(letter, count + 1);
     } else {
       prev.set(letter, 1);
     }
