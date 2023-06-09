@@ -1,7 +1,8 @@
 import {
-  generateCypher,
   applyCypher,
   clearCypherValue,
+  generateCypher,
+  getReverseCypher,
 } from "../src/utils/cypher";
 
 describe("Cypher Utilities", () => {
@@ -28,6 +29,26 @@ describe("Cypher Utilities", () => {
       clearCypherValue(cypher, "b");
 
       expect(cypher.get("a")).toBe("");
+    });
+  });
+
+  describe("getReverseCypher()", () => {
+    it("should return a cypher with keys and values swapped", () => {
+      const cypher = new Map<string, string>([
+        ["a", "b"],
+        ["c", "d"],
+      ]);
+      const reverseCypher = getReverseCypher(cypher);
+
+      expect(reverseCypher.get("b")).toBe("a");
+      expect(reverseCypher.get("d")).toBe("c");
+    });
+
+    it("should return an empty map when given an empty cypher", () => {
+      const cypher = new Map<string, string>();
+      const reverseCypher = getReverseCypher(cypher);
+
+      expect(reverseCypher.size).toBe(0);
     });
   });
 });
