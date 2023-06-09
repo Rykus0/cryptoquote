@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useCallback,
   useEffect,
   useReducer,
   useRef,
@@ -39,6 +40,7 @@ import reducer, {
 // - challenge mode: time limit
 // - help mode: show used and unused letters / letter bank
 // - show/hide letter frequency
+// - Keep track of past scores and quotes
 
 // ops stuff
 // - commitlint & husky
@@ -93,17 +95,17 @@ export default function Home() {
     dispatch({ type: ActionType.SetCurrentLetter, payload: e.target.name });
   }
 
-  function tick() {
+  const tick = useCallback(() => {
     dispatch({ type: ActionType.Tick, payload: Date.now() });
 
     if (!state.win) {
       setTimeout(tick, 100);
     }
-  }
+  }, [state.win]);
 
   useEffect(() => {
     tick();
-  }, []);
+  }, [tick]);
 
   useEffect(() => {
     (async function start() {
