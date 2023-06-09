@@ -32,12 +32,6 @@ import reducer, {
 // - backspace empty input should focus previous input
 // - display tags and allow filtering by tag
 
-const ID_DELIM = ":";
-
-function createLetterId(wordIdx: number, letterIdx: number) {
-  return ["letter", wordIdx, letterIdx].join(ID_DELIM);
-}
-
 async function getQuote() {
   const response = await fetch("https://api.quotable.io/random");
   const data = await response.json();
@@ -110,8 +104,7 @@ export default function Home() {
               <Word key={`word-${word}-${wordIdx}`}>
                 {word.split("").map((char: string, charIdx: number) => (
                   <Letter
-                    key={createLetterId(wordIdx, charIdx)}
-                    id={createLetterId(wordIdx, charIdx)}
+                    key={`letter-${wordIdx}-${charIdx}`}
                     char={char}
                     onChange={updateAnswer}
                     onFocus={focusLetter}

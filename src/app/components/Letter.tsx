@@ -1,9 +1,8 @@
-import { type ChangeEvent, type FocusEvent } from "react";
+import { useId, type ChangeEvent, type FocusEvent } from "react";
 import styles from "./Letter.module.css";
 
 interface LetterProps {
   char: string;
-  id: string;
   value?: string;
   highlighted?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -11,8 +10,9 @@ interface LetterProps {
 }
 
 export default function Letter(props: LetterProps) {
-  const { char, id } = props;
+  const { char } = props;
   const isAlpha = /[a-zA-Z]/.test(char);
+  const id = useId();
 
   return (
     <span className={props.highlighted ? styles.focusedLetter : styles.letter}>
