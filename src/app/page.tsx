@@ -1,13 +1,15 @@
 "use client";
 
 import {
+  useEffect,
   useReducer,
+  useRef,
   type ChangeEvent,
   type FocusEvent,
   type Reducer,
-  useEffect,
 } from "react";
 import styles from "./page.module.css";
+import { focusNextEmptyInput } from "@/utils/focus";
 import Letter from "@/app/components/Letter";
 import Word from "@/app/components/Word";
 import reducer, {
@@ -27,47 +29,13 @@ import reducer, {
 // -- random placeholder elements of random length
 // - Improve overall visuals
 // - Improve win condition visuals
-// - improve focus management
+// - backspace empty input should focus previous input
+// - display tags and allow filtering by tag
 
 const ID_DELIM = ":";
 
-function focusNextLetter(currentId: string) {
-  const nextInput = getNextEmptyLetter(currentId);
-
-  if (nextInput) {
-    nextInput.focus();
-  }
-}
-
 function createLetterId(wordIdx: number, letterIdx: number) {
   return ["letter", wordIdx, letterIdx].join(ID_DELIM);
-}
-
-function getNextEmptyLetter(letterId: string) {
-  const { wordIdx, letterIdx } = parseLetterId(letterId);
-  const nextId = createLetterId(wordIdx, letterIdx + 1);
-
-  const nextEl = document.getElementById(nextId) as HTMLInputElement;
-  if (nextEl) {
-    if (nextEl.value || nextEl.hasAttribute("readonly")) {
-      return getNextEmptyLetter(nextId);
-    } else {
-      return nextEl;
-    }
-  } else if (letterIdx === -1) {
-    return null;
-  } else {
-    return getNextEmptyLetter(createLetterId(wordIdx + 1, -1));
-  }
-}
-
-function parseLetterId(letterId: string) {
-  const [label, wordIdx, letterIdx] = letterId.split(ID_DELIM);
-  return {
-    label,
-    wordIdx: parseInt(wordIdx, 10),
-    letterIdx: parseInt(letterIdx, 10),
-  };
 }
 
 async function getQuote() {
@@ -86,6 +54,7 @@ export default function Home() {
     reducer,
     initialState
   );
+  const quoteRef = useRef<HTMLDivElement>(null);
 
   async function newGame() {
     dispatch({ type: ActionType.Loading });
@@ -103,9 +72,8 @@ export default function Home() {
       payload: { encoded: e.target.name, decoded: e.target.value },
     });
 
-    // Do this after the update goes through
-    if (e.target.value) {
-      window.requestAnimationFrame(() => focusNextLetter(e.target.id));
+    if (e.target.value && quoteRef.current) {
+      window.requestAnimationFrame(() => focusNextEmptyInput(quoteRef.current));
     }
   }
 
@@ -128,7 +96,7 @@ export default function Home() {
 
       {state.win && <div>🎉 You Won! 🎉</div>}
 
-      <div className={styles.quote}>
+      <div ref={quoteRef} className={styles.quote}>
         {state.loading ? (
           <span>loading...</span>
         ) : (
