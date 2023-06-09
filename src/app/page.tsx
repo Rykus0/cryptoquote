@@ -24,6 +24,9 @@ import reducer, {
 // TODO
 // - Loading state - improvement
 // -- random placeholder elements of random length
+// - commitlint & husky
+// - component tests
+// - more unit tests
 // - Improve quote visuals and typography
 // - Improve win condition visuals
 // - improve control layout and visuals
@@ -41,10 +44,8 @@ import reducer, {
 // - show/hide letter frequency
 // - Keep track of past scores and quotes
 // - Hint (reveal letter)
-
-// ops stuff
-// - commitlint & husky
-// - component tests
+// - handle non-latin characters
+// - wrap tab back to first letter(?)
 
 async function getQuote() {
   const response = await fetch("https://api.quotable.io/random");
