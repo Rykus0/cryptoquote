@@ -93,7 +93,10 @@ export default function Home() {
 
   function tick() {
     dispatch({ type: ActionType.Tick, payload: Date.now() });
-    setTimeout(tick, 100);
+
+    if (!state.win) {
+      setTimeout(tick, 100);
+    }
   }
 
   useEffect(() => {

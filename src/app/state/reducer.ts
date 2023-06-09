@@ -54,7 +54,8 @@ export type Action =
 export default function reducer(state: State, action: Action): State {
   switch (action.type) {
     case ActionType.Tick:
-      const elapsed = document.hidden ? 0 : action.payload - state.lastTick;
+      const elapsed =
+        document.hidden || state.win ? 0 : action.payload - state.lastTick;
 
       return {
         ...state,
