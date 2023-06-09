@@ -67,13 +67,17 @@ export default function Home() {
   }
 
   function updateAnswer(e: ChangeEvent<HTMLInputElement>) {
-    dispatch({
-      type: ActionType.SetAnswer,
-      payload: { encoded: e.target.name, decoded: e.target.value },
-    });
+    if (/[a-zA-Z]/.test(e.target.value)) {
+      dispatch({
+        type: ActionType.SetAnswer,
+        payload: { encoded: e.target.name, decoded: e.target.value },
+      });
 
-    if (e.target.value && quoteRef.current) {
-      window.requestAnimationFrame(() => focusNextEmptyInput(quoteRef.current));
+      if (e.target.value && quoteRef.current) {
+        window.requestAnimationFrame(() =>
+          focusNextEmptyInput(quoteRef.current)
+        );
+      }
     }
   }
 
