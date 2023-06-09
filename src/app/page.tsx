@@ -21,6 +21,7 @@ import reducer, {
 } from "@/app/state/reducer";
 
 // TODO
+// - Disable inputs/prevent input when game is won
 // - Letter frequency
 // - Give up (reveal all)
 // - Hint (reveal letter)
@@ -37,6 +38,8 @@ import reducer, {
 // - light and dark theme
 // - ability to pause timer - obscure play screen to prevent cheating
 // - other themes
+// - challenge mode: time limit
+// - help mode: show used and unused letters / letter bank
 
 // ops stuff
 // - commitlint & husky

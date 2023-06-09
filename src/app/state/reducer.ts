@@ -89,6 +89,8 @@ export default function reducer(state: State, action: Action): State {
       };
 
     case ActionType.SetAnswer:
+      if (state.win) return state;
+
       const newAnswer = new Map(state.answerCypher);
 
       clearCypherValue(newAnswer, action.payload.decoded);
