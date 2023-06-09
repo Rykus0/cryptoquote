@@ -13,6 +13,8 @@ export type State = {
   currentLetter: string;
   loading?: boolean;
   win?: boolean;
+  msElapsed: number;
+  lastTick: number;
 };
 
 export const initialState: State = {
@@ -23,6 +25,8 @@ export const initialState: State = {
   currentLetter: "",
   loading: false,
   win: false,
+  msElapsed: 0,
+  lastTick: Date.now(),
 };
 
 export enum ActionType {
@@ -31,6 +35,7 @@ export enum ActionType {
   Loading = "loading",
   SetAnswer = "setAnswer",
   SetCurrentLetter = "setCurrentLetter",
+  Tick = "tick",
 }
 
 export type Action =
@@ -44,22 +49,30 @@ export type Action =
       payload: { encoded: string; decoded: string };
     }
   | { type: ActionType.Clear }
-  | { type: ActionType.SetCurrentLetter; payload: string };
-
+  | { type: ActionType.SetCurrentLetter; payload: string }
+  | { type: ActionType.Tick; payload: number };
 export default function reducer(state: State, action: Action): State {
   switch (action.type) {
+    case ActionType.Tick:
+      const elapsed = document.hidden ? 0 : action.payload - state.lastTick;
+
+      return {
+        ...state,
+        msElapsed: state.msElapsed + elapsed,
+        lastTick: action.payload,
+      };
+
     case ActionType.NewGame:
       const cypher = generateCypher();
       const quote = formatQuote(action.payload.quote, action.payload.author);
 
       return {
-        ...state,
+        ...initialState,
         cypher: cypher,
         answerCypher: createEmptyReverseCypher(cypher),
         quote: quote,
         encryptedQuote: applyCypher(quote, cypher),
-        currentLetter: "",
-        loading: false,
+        lastTick: Date.now(),
       };
 
     case ActionType.Clear:

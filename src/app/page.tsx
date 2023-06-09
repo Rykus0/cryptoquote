@@ -12,6 +12,7 @@ import styles from "./page.module.css";
 import { focusNextEmptyInput } from "@/utils/focus";
 import Letter from "@/app/components/Letter";
 import Word from "@/app/components/Word";
+import Timer from "@/app/components/Timer";
 import reducer, {
   initialState,
   ActionType,
@@ -20,8 +21,6 @@ import reducer, {
 } from "@/app/state/reducer";
 
 // TODO
-// - bug: clear existing letter
-// - Timer (pause when not focused)
 // - Letter frequency
 // - Give up (reveal all)
 // - Hint (reveal letter)
@@ -30,11 +29,13 @@ import reducer, {
 // - Improve overall visuals
 // - Improve win condition visuals
 // - backspace empty input should focus previous input
+// - fix TS warnings and errors
 // ^^^^^^^^^^^ MVP ^^^^^^^^^^
 // - display tags and allow filtering by tag
 // - State Persistence
 // - no background for punctuation outside of words
 // - light and dark theme
+// - ability to pause timer - obscure play screen to prevent cheating
 // - other themes
 
 // ops stuff
@@ -90,6 +91,15 @@ export default function Home() {
     dispatch({ type: ActionType.SetCurrentLetter, payload: e.target.name });
   }
 
+  function tick() {
+    dispatch({ type: ActionType.Tick, payload: Date.now() });
+    setTimeout(tick, 100);
+  }
+
+  useEffect(() => {
+    tick();
+  }, []);
+
   useEffect(() => {
     (async function start() {
       await newGame();
@@ -102,6 +112,7 @@ export default function Home() {
 
       <button onClick={newGame}>New game</button>
       <button onClick={clearBoard}>Clear</button>
+      <Timer ms={state.msElapsed} />
 
       {state.win && <div>🎉 You Won! 🎉</div>}
 
