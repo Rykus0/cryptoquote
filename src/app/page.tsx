@@ -21,32 +21,6 @@ import reducer, {
   type Action,
 } from "@/app/state/reducer";
 
-// TODO
-// - Loading state - improvement
-// -- random placeholder elements of random length
-// - commitlint & husky
-// - component tests
-// - more unit tests
-// - Improve quote visuals and typography
-// - Improve win condition visuals
-// - improve control layout and visuals
-// - backspace empty input should focus previous input
-// - fix TS warnings and errors
-// ^^^^^^^^^^^ MVP ^^^^^^^^^^
-// - display tags and allow filtering by tag
-// - State Persistence
-// - no background for punctuation outside of words
-// - light and dark theme
-// - ability to pause timer - obscure play screen to prevent cheating
-// - other themes and switcher
-// - challenge mode: time limit
-// - help mode: show used and unused letters / letter bank
-// - show/hide letter frequency
-// - Keep track of past scores and quotes
-// - Hint (reveal letter)
-// - handle non-latin characters
-// - wrap tab back to first letter(?)
-
 async function getQuote() {
   const response = await fetch("https://api.quotable.io/random");
   const data = await response.json();
@@ -54,7 +28,6 @@ async function getQuote() {
   return {
     quote: data.content,
     author: data.author,
-    // tags: data.tags,
   };
 }
 
