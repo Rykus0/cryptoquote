@@ -5,6 +5,7 @@ import {
   type ChangeEvent,
   type FocusEvent,
   type Reducer,
+  useEffect,
 } from "react";
 import styles from "./page.module.css";
 import Letter from "@/app/components/Letter";
@@ -18,7 +19,7 @@ import reducer, {
 
 // TODO
 // - State Persistence
-// - Timer
+// - Timer (pause when not focused)
 // - Letter frequency
 // - Give up (reveal all)
 // - Hint (reveal letter)
@@ -111,6 +112,12 @@ export default function Home() {
   function focusLetter(e: FocusEvent<HTMLInputElement>) {
     dispatch({ type: ActionType.SetCurrentLetter, payload: e.target.name });
   }
+
+  useEffect(() => {
+    (async function start() {
+      await newGame();
+    })();
+  }, []);
 
   return (
     <main>
