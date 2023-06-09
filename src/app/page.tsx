@@ -88,9 +88,9 @@ export default function Home() {
         payload: { encoded: e.target.name, decoded: value },
       });
 
-      if (value && quoteRef.current) {
-        window.requestAnimationFrame(() =>
-          focusNextEmptyInput(quoteRef.current)
+      if (value) {
+        window.requestAnimationFrame(
+          () => quoteRef.current && focusNextEmptyInput(quoteRef.current)
         );
       }
     }
