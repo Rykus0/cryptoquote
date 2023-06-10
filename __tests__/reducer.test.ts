@@ -101,4 +101,15 @@ describe("Reducer", () => {
       expect(state.win).toBe(false);
     });
   });
+
+  describe("Clear", () => {
+    it("should reset the answer cypher", () => {
+      const startState = { ...initialState };
+      startState.answerCypher.set("t", "a");
+
+      const state = reducer(startState, { type: ActionType.Clear });
+
+      expect(state.answerCypher.get("t")).toBe("");
+    });
+  });
 });
