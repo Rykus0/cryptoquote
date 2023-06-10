@@ -112,4 +112,12 @@ describe("Reducer", () => {
       expect(state.answerCypher.get("t")).toBe("");
     });
   });
+
+  describe("Loading", () => {
+    it("should set the loading state", () => {
+      const state = reducer(initialState, { type: ActionType.Loading });
+
+      expect(state.loading).toBe(true);
+    });
+  });
 });
