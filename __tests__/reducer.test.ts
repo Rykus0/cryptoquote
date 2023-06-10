@@ -120,4 +120,67 @@ describe("Reducer", () => {
       expect(state.loading).toBe(true);
     });
   });
+
+  describe("SetAnswer", () => {
+    it("should map the encoded letter to the given one in the answer cypher", () => {
+      const state = reducer(initialState, {
+        type: ActionType.SetAnswer,
+        payload: { encoded: "a", decoded: "b" },
+      });
+
+      expect(state.answerCypher.get("a")).toBe("b");
+    });
+
+    it("should clear any existing cypher values for the given decoded letter", () => {
+      const state = reducer(
+        {
+          ...initialState,
+          answerCypher: new Map([
+            ["a", "c"],
+            ["b", ""],
+          ]),
+        },
+        {
+          type: ActionType.SetAnswer,
+          payload: { encoded: "b", decoded: "c" },
+        }
+      );
+
+      expect(state.answerCypher.get("a")).toBe("");
+    });
+
+    it("should not update state if the game is won", () => {
+      const state = reducer(
+        {
+          ...initialState,
+          answerCypher: new Map([["a", "c"]]),
+          win: true,
+        },
+        {
+          type: ActionType.SetAnswer,
+          payload: { encoded: "a", decoded: "b" },
+        }
+      );
+
+      expect(state.answerCypher.get("a")).toBe("c");
+    });
+
+    it("should update the win state if the answer solves the cypher", () => {
+      const state = reducer(
+        {
+          ...initialState,
+          answerCypher: new Map([
+            ["a", "c"],
+            ["b", ""],
+          ]),
+        },
+        {
+          type: ActionType.SetAnswer,
+          payload: { encoded: "b", decoded: "c" },
+        }
+      );
+
+      expect(state.win).toBe(true);
+    });
+  });
 });
