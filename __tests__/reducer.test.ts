@@ -194,4 +194,32 @@ describe("Reducer", () => {
       expect(state).toEqual({ ...state, currentLetter: "a" });
     });
   });
+
+  describe("GiveUp", () => {
+    const state = reducer(
+      {
+        ...initialState,
+        cypher: new Map([
+          ["a", "b"],
+          ["c", "d"],
+        ]),
+      },
+      {
+        type: ActionType.GiveUp,
+      }
+    );
+
+    it("should set the win state to true", () => {
+      expect(state.win).toBe(true);
+    });
+
+    it("should set the answer cypher to the reverse of the current cypher", () => {
+      expect(state.answerCypher).toEqual(
+        new Map([
+          ["b", "a"],
+          ["d", "c"],
+        ])
+      );
+    });
+  });
 });
