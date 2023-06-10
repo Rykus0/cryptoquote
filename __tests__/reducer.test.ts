@@ -183,4 +183,15 @@ describe("Reducer", () => {
       expect(state.win).toBe(true);
     });
   });
+
+  describe("SetCurrentLetter", () => {
+    it("should set the current letter to the given one", () => {
+      const state = reducer(initialState, {
+        type: ActionType.SetCurrentLetter,
+        payload: "a",
+      });
+
+      expect(state).toEqual({ ...state, currentLetter: "a" });
+    });
+  });
 });
