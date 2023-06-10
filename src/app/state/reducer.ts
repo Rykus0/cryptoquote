@@ -73,8 +73,8 @@ export default function reducer(state: State, action: Action): State {
 
     case ActionType.NewGame:
       const cypher = generateCypher();
-      const quote = formatQuote(action.payload.quote, action.payload.author);
-      const encrypted = applyCypher(quote, cypher);
+      const quote = combineQuote(action.payload.quote, action.payload.author);
+      const encrypted = applyCypher(normalizeQuote(quote), cypher);
 
       return {
         ...initialState,
@@ -115,7 +115,9 @@ export default function reducer(state: State, action: Action): State {
       return {
         ...state,
         answerCypher: newAnswer,
-        win: applyCypher(state.encryptedQuote, newAnswer) === state.quote,
+        win:
+          applyCypher(state.encryptedQuote, newAnswer) ===
+          normalizeQuote(state.quote),
       };
 
     // -------------------------------------
@@ -139,10 +141,22 @@ export default function reducer(state: State, action: Action): State {
   return state;
 }
 
-function formatQuote(quote: string, author: string) {
-  return (
-    quote.toLocaleLowerCase("en-US") + " - " + author.toLocaleLowerCase("en-US")
-  );
+function combineQuote(quote: string, author: string) {
+  return quote + " - " + author;
+}
+
+export function normalizeQuote(quote: string) {
+  return removeAccentsAndDiacritics(quote).toLocaleLowerCase("en-US");
+}
+
+function removeAccentsAndDiacritics(str: string) {
+  const str2 = str.replace(/[ø]/, "o").replace(/[Ø]/, "O");
+
+  if (str2.normalize) {
+    return str2.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
+  return str2;
 }
 
 function createEmptyReverseCypher(cypher: Cypher) {
