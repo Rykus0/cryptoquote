@@ -20,8 +20,11 @@ describe("Reducer", () => {
         payload: 2000,
       });
 
-      expect(state.msElapsed).toBe(2000);
-      expect(state.lastTick).toBe(2000);
+      expect(state).toEqual({
+        ...initialState,
+        msElapsed: 2000,
+        lastTick: 2000,
+      });
     });
 
     it("should not update the timer while the document is hidden", () => {
@@ -40,8 +43,11 @@ describe("Reducer", () => {
         payload: 2000,
       });
 
-      expect(state.msElapsed).toBe(1000);
-      expect(state.lastTick).toBe(2000);
+      expect(state).toEqual({
+        ...initialState,
+        msElapsed: 1000,
+        lastTick: 2000,
+      });
     });
   });
 
@@ -104,12 +110,28 @@ describe("Reducer", () => {
 
   describe("Clear", () => {
     it("should reset the answer cypher", () => {
-      const startState = { ...initialState };
-      startState.answerCypher.set("t", "a");
+      const cypher = new Map([
+        ["a", "b"],
+        ["c", "d"],
+      ]);
 
-      const state = reducer(startState, { type: ActionType.Clear });
+      const state = reducer(
+        {
+          ...initialState,
+          cypher: cypher,
+          answerCypher: new Map([["b", "a"]]),
+        },
+        { type: ActionType.Clear }
+      );
 
-      expect(state.answerCypher.get("t")).toBe("");
+      expect(state).toEqual({
+        ...initialState,
+        cypher: cypher,
+        answerCypher: new Map([
+          ["b", ""],
+          ["d", ""],
+        ]),
+      });
     });
   });
 
@@ -117,7 +139,7 @@ describe("Reducer", () => {
     it("should set the loading state", () => {
       const state = reducer(initialState, { type: ActionType.Loading });
 
-      expect(state.loading).toBe(true);
+      expect(state).toEqual({ ...initialState, loading: true });
     });
   });
 
@@ -196,30 +218,30 @@ describe("Reducer", () => {
   });
 
   describe("GiveUp", () => {
-    const state = reducer(
-      {
+    it("should set the answer cypher to the reverse of the current cypher and end the game", () => {
+      const cypher = new Map([
+        ["a", "b"],
+        ["c", "d"],
+      ]);
+      const state = reducer(
+        {
+          ...initialState,
+          cypher: cypher,
+        },
+        {
+          type: ActionType.GiveUp,
+        }
+      );
+
+      expect(state).toEqual({
         ...initialState,
-        cypher: new Map([
-          ["a", "b"],
-          ["c", "d"],
-        ]),
-      },
-      {
-        type: ActionType.GiveUp,
-      }
-    );
-
-    it("should set the win state to true", () => {
-      expect(state.win).toBe(true);
-    });
-
-    it("should set the answer cypher to the reverse of the current cypher", () => {
-      expect(state.answerCypher).toEqual(
-        new Map([
+        cypher: cypher,
+        answerCypher: new Map([
           ["b", "a"],
           ["d", "c"],
-        ])
-      );
+        ]),
+        win: true,
+      });
     });
   });
 });
