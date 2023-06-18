@@ -1,7 +1,9 @@
 .controls {
   display: flex;
+  flex-wrap: wrap;
   padding: 1em 0;
   column-gap: 1em;
+  row-gap: .5em;
 
   position: sticky;
   top: 0;
