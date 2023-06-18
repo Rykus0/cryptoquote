@@ -93,12 +93,15 @@ export default function Home() {
 
   return (
     <main>
-      <h1>Cryptoquote</h1>
-
-      <button onClick={newGame}>New game</button>
-      <button onClick={clearBoard}>Clear</button>
-      <button onClick={revealAll}>I give up</button>
-      <Timer ms={state.msElapsed} />
+      <header>
+        <h1>Cryptoquote</h1>
+      </header>
+      <div className={styles.controls}>
+        <button onClick={newGame}>New game</button>
+        <button onClick={clearBoard}>Clear</button>
+        <button onClick={revealAll}>I give up</button>
+        <Timer ms={state.msElapsed} />
+      </div>
 
       {state.win && <div>🎉 You Won! 🎉</div>}
 

@@ -1,3 +1,19 @@
+.controls {
+  display: flex;
+  padding: 1em 0;
+  column-gap: 1em;
+
+  position: sticky;
+  top: 0;
+  left: 0;
+
+  background: var(--color-page-bg);
+}
+
+.controls > time {
+  margin-inline-start: auto;
+}
+
 .quote {
   display: flex;
   flex-wrap: wrap;
