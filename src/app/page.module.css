@@ -11,7 +11,7 @@
 }
 
 .controls > time {
-  margin-inline-start: auto;
+  margin: auto 0 auto auto;
 }
 
 .quote {
