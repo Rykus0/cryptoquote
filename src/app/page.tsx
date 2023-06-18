@@ -11,9 +11,10 @@ import {
 } from "react";
 import styles from "./page.module.css";
 import { focusNextEmptyInput } from "@/utils/focus";
+import Button from "@/app/components/Button";
 import Letter from "@/app/components/Letter";
-import Word from "@/app/components/Word";
 import Timer from "@/app/components/Timer";
+import Word from "@/app/components/Word";
 import reducer, {
   initialState,
   ActionType,
@@ -97,9 +98,9 @@ export default function Home() {
         <h1>Cryptoquote</h1>
       </header>
       <div className={styles.controls}>
-        <button onClick={newGame}>New game</button>
-        <button onClick={clearBoard}>Clear</button>
-        <button onClick={revealAll}>I give up</button>
+        <Button onClick={newGame}>New game</Button>
+        <Button onClick={clearBoard}>Clear</Button>
+        <Button onClick={revealAll}>Give up</Button>
         <Timer ms={state.msElapsed} />
       </div>
 
