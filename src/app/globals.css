@@ -1,4 +1,11 @@
 :root {
-  --color-highlight-bg: lime;
-  --color-word-bg: #ccc;
+  --color-page-bg: #fff;
+
+  --color-highlight-bg: #90fde9;
+
+  --color-word-bg: #b8cdce;
+  --color-word-fg: #000;
+
+  --color-letter-bg: #f1fffb;
+  --color-letter-fg: #222;
 }

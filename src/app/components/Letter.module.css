@@ -2,7 +2,7 @@
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: baseline;
   min-width: 1em;
   padding: 1px;
 }
@@ -18,13 +18,23 @@
 
 .letterInput {
   width: 1em;
+  padding: .25em;
+  margin: 0;
+
   text-align: center;
   text-transform: uppercase;
+  font-size: 1em;
+
+  color: var(--color-letter-fg);
+  background-color: var(--color-letter-bg);
+
+  border: 0;
+  border-radius: 0;
 }
 
 .letterInput:read-only {
+  color: inherit;
   background: none;
-  border: 0;
 }
 
 .letterLabel {
