@@ -1,0 +1,17 @@
+.button {
+  display: inline-block;
+  padding: 1em 1.618em;
+  border: none;
+
+  text-align: center;
+  text-decoration: none;
+
+  color: white;
+  background-color: #2bb9bf;
+  transition: color 0.2s ease-out, background-color 0.2s ease-out;
+}
+
+.button:hover, .button:focus {
+  color: var(--color-highlight-fg);
+  background-color: var(--color-highlight-bg);
+}
