@@ -1,3 +1,5 @@
+import styles from "./Timer.module.css";
+
 type TimerProps = {
   ms: number;
 };
@@ -6,7 +8,10 @@ export default function Timer(props: TimerProps) {
   const { hours, minutes, seconds } = getHMSFromMs(props.ms);
 
   return (
-    <time dateTime={`${hours}h ${minutes}m ${seconds}s`}>
+    <time
+      dateTime={`${hours}h ${minutes}m ${seconds}s`}
+      className={styles.timer}
+    >
       {getPaddedNumber(hours)}:{getPaddedNumber(minutes)}:
       {getPaddedNumber(seconds)}
     </time>
