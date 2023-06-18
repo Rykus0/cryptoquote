@@ -12,6 +12,7 @@ import {
 import styles from "./page.module.css";
 import { focusNextEmptyInput } from "@/utils/focus";
 import Button from "@/app/components/Button";
+import Confetti from "@/app/components/Confetti";
 import Letter from "@/app/components/Letter";
 import Timer from "@/app/components/Timer";
 import Word from "@/app/components/Word";
@@ -104,7 +105,7 @@ export default function Home() {
         <Timer ms={state.msElapsed} />
       </div>
 
-      {state.win && <div>🎉 You Won! 🎉</div>}
+      {state.win && <Confetti>🎉 You Won! 🎉</Confetti>}
 
       <div ref={quoteRef} className={styles.quote}>
         {state.loading ? (
