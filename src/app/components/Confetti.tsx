@@ -1,3 +1,5 @@
+// From https://codepen.io/bananascript/pen/EyZeWm?editors=0010
+
 import { useEffect, useRef, type PropsWithChildren } from "react";
 import styles from "./Confetti.module.css";
 
@@ -19,102 +21,107 @@ const dyMax = 0.18;
 const dThetaMin = 0.4;
 const dThetaMax = 0.7 - dThetaMin;
 
+const colorThemes = [
+  function () {
+    return color(
+      (200 * random()) | 0,
+      (200 * random()) | 0,
+      (200 * random()) | 0
+    );
+  },
+  function () {
+    const black = (200 * random()) | 0;
+    return color(200, black, black);
+  },
+  function () {
+    const black = (200 * random()) | 0;
+    return color(black, 200, black);
+  },
+  function () {
+    const black = (200 * random()) | 0;
+    return color(black, black, 200);
+  },
+  function () {
+    return color(200, 100, (200 * random()) | 0);
+  },
+  function () {
+    return color((200 * random()) | 0, 200, 200);
+  },
+  function () {
+    const black = (256 * random()) | 0;
+    return color(black, black, black);
+  },
+  function (): string {
+    return colorThemes[random() < 0.5 ? 1 : 2]();
+  },
+  function (): string {
+    return colorThemes[random() < 0.5 ? 3 : 5]();
+  },
+  function (): string {
+    return colorThemes[random() < 0.5 ? 2 : 4]();
+  },
+];
+
+function color(r: number, g: number, b: number) {
+  return "rgb(" + r + "," + g + "," + b + ")";
+}
+
 // Create a 1D Maximal Poisson Disc over [0, 1]
 const radius = 1 / eccentricity;
 const radius2 = radius + radius;
 
 export default function Confetti(props: PropsWithChildren) {
-  const container = useRef(document.createElement("div"));
+  const container = useRef<HTMLDivElement>(null);
+  const timer = useRef<NodeJS.Timeout | undefined>(undefined);
+  const frame = useRef<number | undefined>(undefined);
 
   useEffect(() => {
-    // Globals
-    let timer: NodeJS.Timeout | undefined = undefined;
-    let frame = undefined;
     let confetti: Confetto[] = [];
 
-    let colorThemes = [
-      function () {
-        return color(
-          (200 * random()) | 0,
-          (200 * random()) | 0,
-          (200 * random()) | 0
-        );
-      },
-      function () {
-        const black = (200 * random()) | 0;
-        return color(200, black, black);
-      },
-      function () {
-        const black = (200 * random()) | 0;
-        return color(black, 200, black);
-      },
-      function () {
-        const black = (200 * random()) | 0;
-        return color(black, black, 200);
-      },
-      function () {
-        return color(200, 100, (200 * random()) | 0);
-      },
-      function () {
-        return color((200 * random()) | 0, 200, 200);
-      },
-      function () {
-        const black = (256 * random()) | 0;
-        return color(black, black, black);
-      },
-      function () {
-        return colorThemes[random() < 0.5 ? 1 : 2]();
-      },
-      function () {
-        return colorThemes[random() < 0.5 ? 3 : 5]();
-      },
-      function () {
-        return colorThemes[random() < 0.5 ? 2 : 4]();
-      },
-    ];
+    if (container.current && !frame.current) {
+      // Add confetti
+      let theme = colorThemes[0];
 
-    // Confetto constructor
-    function poof(container: HTMLElement) {
-      if (!frame) {
-        // Add confetti
-        let theme = colorThemes[0];
+      (function addConfetto() {
+        let confetto = new Confetto(theme);
+        console.log(confetto);
+        confetti.push(confetto);
+        container.current.appendChild(confetto.outer);
+        timer.current = setTimeout(addConfetto, spread * random());
+      })();
 
-        (function addConfetto() {
-          let confetto = new Confetto(theme);
-          console.log(confetto);
-          confetti.push(confetto);
-          container.appendChild(confetto.outer);
-          timer = setTimeout(addConfetto, spread * random());
-        })();
+      // Start the loop
+      let prev: number | undefined = undefined;
+      requestAnimationFrame(function loop(timestamp) {
+        let delta = prev ? timestamp - prev : 0;
+        prev = timestamp;
+        let height = window.innerHeight;
 
-        // Start the loop
-        let prev: number | undefined = undefined;
-        requestAnimationFrame(function loop(timestamp) {
-          let delta = prev ? timestamp - prev : 0;
-          prev = timestamp;
-          let height = window.innerHeight;
-
-          for (let i = confetti.length - 1; i >= 0; --i) {
-            if (confetti[i].update(height, delta)) {
-              container.removeChild(confetti[i].outer);
-              confetti.splice(i, 1);
-            }
+        for (let i = confetti.length - 1; i >= 0; --i) {
+          if (confetti[i].update(height, delta)) {
+            container.current?.removeChild(confetti[i].outer);
+            confetti.splice(i, 1);
           }
+        }
 
-          if (timer || confetti.length) {
-            frame = requestAnimationFrame(loop);
-            return frame;
-          }
+        if (timer.current || confetti.length) {
+          frame.current = requestAnimationFrame(loop);
+          return frame;
+        }
 
-          // Cleanup
-          document.body.removeChild(container);
-          frame = undefined;
-        });
-      }
+        // Cleanup
+        if (container.current) {
+          document.body.removeChild(container.current);
+        }
+        frame.current = undefined;
+      });
     }
 
-    poof(container.current);
-  }, []);
+    return () => {
+      timer.current = undefined;
+      frame.current = undefined;
+    };
+  }, [container]);
 
   return (
     <div ref={container} className={styles.confetti}>
@@ -138,7 +145,7 @@ class Confetto {
   private splineX: number[] = createPoisson();
   private splineY: number[] = [];
 
-  constructor(theme) {
+  constructor(theme: () => string) {
     this.outer.appendChild(this.inner);
 
     let outerStyle = this.outer.style;
@@ -256,10 +263,6 @@ function createPoisson() {
   }
 
   return spline.sort((a, b) => a - b);
-}
-
-function color(r: number, g: number, b: number) {
-  return "rgb(" + r + "," + g + "," + b + ")";
 }
 
 // Cosine interpolation
