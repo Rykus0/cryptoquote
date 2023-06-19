@@ -1,3 +1,4 @@
+// TODO: Should letters be allowed to map to themselves? And if so, how often?
 export default function shuffle(array: any[]) {
   let shuffled = [...array];
   let currentIndex = shuffled.length;
@@ -18,3 +19,12 @@ export default function shuffle(array: any[]) {
 
   return shuffled;
 }
+
+// TODO: shuffle but do not allow any letters to map to themselves
+// export function derange(original: any[]) {
+// take from anywhere but the current index (or used indices)
+// - remove current from unused and get random based on length
+// - add current back to unused
+// push to new array
+// remove from original array
+// }
