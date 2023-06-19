@@ -109,31 +109,39 @@ export default function Home() {
         <Timer ms={state.msElapsed} />
       </div>
 
-      {state.win && <Confetti>🎉 You Won! 🎉</Confetti>}
-
-      <div ref={quoteRef} className={styles.quote}>
-        {state.loading ? (
-          <span>loading...</span>
-        ) : (
-          state.encryptedQuote
-            .split(/\s+/)
-            .map((word: string, wordIdx: number) => (
-              <Word key={`word-${word}-${wordIdx}`}>
-                {word.split("").map((char: string, charIdx: number) => (
-                  <Letter
-                    key={`letter-${wordIdx}-${charIdx}`}
-                    char={char}
-                    occurrences={state.letterFrequency.get(char) || 0}
-                    onChange={updateAnswer}
-                    onFocus={focusLetter}
-                    highlighted={state.currentLetter === char}
-                    value={state.answerCypher.get(char)}
-                  />
-                ))}
-              </Word>
-            ))
-        )}
-      </div>
+      {state.win ? (
+        <div>
+          <Confetti />
+          <figure className={styles.winQuote}>
+            <blockquote>{state.quote}</blockquote>
+            <figcaption>&mdash; {state.author}</figcaption>
+          </figure>
+        </div>
+      ) : (
+        <div ref={quoteRef} className={styles.quote}>
+          {state.loading ? (
+            <span>loading...</span>
+          ) : (
+            state.encryptedQuote
+              .split(/\s+/)
+              .map((word: string, wordIdx: number) => (
+                <Word key={`word-${word}-${wordIdx}`}>
+                  {word.split("").map((char: string, charIdx: number) => (
+                    <Letter
+                      key={`letter-${wordIdx}-${charIdx}`}
+                      char={char}
+                      occurrences={state.letterFrequency.get(char) || 0}
+                      onChange={updateAnswer}
+                      onFocus={focusLetter}
+                      highlighted={state.currentLetter === char}
+                      value={state.answerCypher.get(char)}
+                    />
+                  ))}
+                </Word>
+              ))
+          )}
+        </div>
+      )}
     </main>
   );
 }
