@@ -1,9 +1,14 @@
-import { type HTMLAttributes } from "react";
+import { type ButtonHTMLAttributes } from "react";
 import styles from "./Button.module.css";
 
-export default function Button(props: HTMLAttributes<HTMLButtonElement>) {
+export default function Button(props: ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
-    <button className={styles.button} onClick={props.onClick}>
+    <button
+      type="button"
+      className={styles.button}
+      onClick={props.onClick}
+      disabled={props.disabled}
+    >
       {props.children}
     </button>
   );
