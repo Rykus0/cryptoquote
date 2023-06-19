@@ -10,6 +10,7 @@ export type State = {
   cypher: Cypher;
   answerCypher: Cypher;
   quote: string;
+  author: string;
   encryptedQuote: string;
   letterFrequency: Map<string, number>;
   currentLetter: string;
@@ -23,6 +24,7 @@ export const initialState: State = {
   cypher: generateCypher(),
   answerCypher: new Map(),
   quote: "",
+  author: "",
   encryptedQuote: "",
   letterFrequency: new Map(),
   currentLetter: "",
@@ -73,14 +75,18 @@ export default function reducer(state: State, action: Action): State {
 
     case ActionType.NewGame:
       const cypher = generateCypher();
-      const quote = combineQuote(action.payload.quote, action.payload.author);
-      const encrypted = applyCypher(normalizeQuote(quote), cypher);
+      const combinedQuote = combineQuote(
+        action.payload.quote,
+        action.payload.author
+      );
+      const encrypted = applyCypher(normalizeQuote(combinedQuote), cypher);
 
       return {
         ...initialState,
         cypher: cypher,
         answerCypher: createEmptyReverseCypher(cypher),
-        quote: quote,
+        quote: action.payload.quote,
+        author: action.payload.author,
         encryptedQuote: encrypted,
         letterFrequency: getLetterFrequencies(encrypted),
         lastTick: Date.now(),
@@ -117,7 +123,7 @@ export default function reducer(state: State, action: Action): State {
         answerCypher: newAnswer,
         win:
           applyCypher(state.encryptedQuote, newAnswer) ===
-          normalizeQuote(state.quote),
+          normalizeQuote(combineQuote(state.quote, state.author)),
       };
 
     // -------------------------------------
