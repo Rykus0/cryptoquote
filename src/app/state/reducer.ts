@@ -16,6 +16,7 @@ export type State = {
   currentLetter: string;
   loading?: boolean;
   win?: boolean;
+  completeWithError?: boolean;
   msElapsed: number;
   lastTick: number;
 };
@@ -30,6 +31,7 @@ export const initialState: State = {
   currentLetter: "",
   loading: false,
   win: false,
+  completeWithError: false,
   msElapsed: 0,
   lastTick: Date.now(),
 };
@@ -98,6 +100,7 @@ export default function reducer(state: State, action: Action): State {
       return {
         ...state,
         answerCypher: createEmptyReverseCypher(state.cypher),
+        completeWithError: false,
       };
 
     // -------------------------------------
@@ -107,6 +110,7 @@ export default function reducer(state: State, action: Action): State {
         ...state,
         loading: true,
         win: false,
+        completeWithError: false,
       };
 
     // -------------------------------------
@@ -123,6 +127,7 @@ export default function reducer(state: State, action: Action): State {
         ...state,
         answerCypher: newAnswer,
         win: isWin(state, newAnswer),
+        completeWithError: isCompleteWithError(state, newAnswer),
       };
 
     // -------------------------------------
@@ -153,7 +158,7 @@ function isWin(state: State, newAnswer: Cypher) {
   );
 }
 
-function completeWithError(state: State, newAnswer: Cypher) {
+function isCompleteWithError(state: State, newAnswer: Cypher) {
   return (
     !isWin(state, newAnswer) &&
     applyCypher(state.encryptedQuote, newAnswer).length ===

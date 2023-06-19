@@ -109,6 +109,12 @@ export default function Home() {
         <Timer ms={state.msElapsed} />
       </div>
 
+      {state.completeWithError && (
+        <p>
+          <b>So close!</b> There is at least one mistake.
+        </p>
+      )}
+
       {state.win ? (
         <div>
           <Confetti />
