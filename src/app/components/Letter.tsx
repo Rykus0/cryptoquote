@@ -15,6 +15,14 @@ export default function Letter(props: LetterProps) {
   const isAlpha = /[a-zA-Z]/.test(char);
   const id = useId();
 
+  function handleFocus(e: FocusEvent<HTMLInputElement>) {
+    e.target.select();
+
+    if (props.onFocus) {
+      props.onFocus(e);
+    }
+  }
+
   return (
     <span className={props.highlighted ? styles.focusedLetter : styles.letter}>
       {isAlpha ? (
@@ -27,7 +35,7 @@ export default function Letter(props: LetterProps) {
             name={char}
             value={props.value}
             onChange={props.onChange}
-            onFocus={props.onFocus}
+            onFocus={handleFocus}
           />
           <label htmlFor={id} className={styles.letterLabel}>
             {char}
