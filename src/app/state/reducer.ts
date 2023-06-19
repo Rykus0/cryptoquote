@@ -153,6 +153,14 @@ function isWin(state: State, newAnswer: Cypher) {
   );
 }
 
+function completeWithError(state: State, newAnswer: Cypher) {
+  return (
+    !isWin(state, newAnswer) &&
+    applyCypher(state.encryptedQuote, newAnswer).length ===
+      combineQuote(state.quote, state.author).length
+  );
+}
+
 export function combineQuote(quote: string, author: string) {
   return quote + " - " + author;
 }
