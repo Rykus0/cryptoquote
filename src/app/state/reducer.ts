@@ -148,7 +148,7 @@ export default function reducer(state: State, action: Action): State {
   return state;
 }
 
-function combineQuote(quote: string, author: string) {
+export function combineQuote(quote: string, author: string) {
   return quote + " - " + author;
 }
 
