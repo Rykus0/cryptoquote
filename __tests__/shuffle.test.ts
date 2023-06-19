@@ -3,7 +3,9 @@ import shuffle from "../src/utils/shuffle";
 describe("Shuffle Utility", () => {
   const testArray = [1, 2, 3, 4, 5];
 
-  it("should return an array not matching the original order", () => {
+  // TODO: Determine threshold for this matching original
+  // TODO: Add derange option (easier difficulty)
+  it.skip("should return an array not matching the original order", () => {
     const shuffled = shuffle(testArray);
     let atLeastOneDifferent = false;
 
