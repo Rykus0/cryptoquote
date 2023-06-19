@@ -106,6 +106,7 @@ export default function reducer(state: State, action: Action): State {
       return {
         ...state,
         loading: true,
+        win: false,
       };
 
     // -------------------------------------
