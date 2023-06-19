@@ -119,14 +119,10 @@ export default function reducer(state: State, action: Action): State {
       clearCypherValue(newAnswer, action.payload.decoded);
       newAnswer.set(action.payload.encoded, action.payload.decoded);
 
-      const isWon =
-        normalizeQuote(applyCypher(state.encryptedQuote, newAnswer)) ===
-        normalizeQuote(combineQuote(state.quote, state.author));
-
       return {
         ...state,
         answerCypher: newAnswer,
-        win: isWon,
+        win: isWin(state, newAnswer),
       };
 
     // -------------------------------------
@@ -148,6 +144,13 @@ export default function reducer(state: State, action: Action): State {
   }
 
   return state;
+}
+
+function isWin(state: State, newAnswer: Cypher) {
+  return (
+    normalizeQuote(applyCypher(state.encryptedQuote, newAnswer)) ===
+    normalizeQuote(combineQuote(state.quote, state.author))
+  );
 }
 
 export function combineQuote(quote: string, author: string) {
