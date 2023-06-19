@@ -2,6 +2,7 @@ import reducer, {
   initialState,
   ActionType,
   normalizeQuote,
+  combineQuote,
 } from "../src/app/state/reducer";
 import { applyCypher } from "../src/utils/cypher";
 
@@ -74,12 +75,19 @@ describe("Reducer", () => {
     });
 
     it("should record the original quote", () => {
-      expect(state.quote).toBe(quote + " - " + author);
+      expect(state.quote).toBe(quote);
+    });
+
+    it("should record the quote author", () => {
+      expect(state.author).toBe(author);
     });
 
     it("should encrypt the quote", () => {
       expect(state.encryptedQuote).toEqual(
-        applyCypher(normalizeQuote(state.quote), state.cypher)
+        applyCypher(
+          normalizeQuote(combineQuote(state.quote, state.author)),
+          state.cypher
+        )
       );
     });
 
@@ -171,7 +179,7 @@ describe("Reducer", () => {
       expect(state.answerCypher.get("a")).toBe("");
     });
 
-    it("should not update state if the game is won", () => {
+    it("should not update state if the game is already won", () => {
       const state = reducer(
         {
           ...initialState,
@@ -191,6 +199,13 @@ describe("Reducer", () => {
       const state = reducer(
         {
           ...initialState,
+          quote: "c",
+          author: "d",
+          encryptedQuote: "a - b",
+          cypher: new Map([
+            ["c", "a"],
+            ["d", "b"],
+          ]),
           answerCypher: new Map([
             ["a", "c"],
             ["b", ""],
@@ -198,11 +213,36 @@ describe("Reducer", () => {
         },
         {
           type: ActionType.SetAnswer,
-          payload: { encoded: "b", decoded: "c" },
+          payload: { encoded: "b", decoded: "d" },
         }
       );
 
       expect(state.win).toBe(true);
+    });
+
+    it("should not update the win state if the answer does not solve the cypher", () => {
+      const state = reducer(
+        {
+          ...initialState,
+          quote: "c",
+          author: "d",
+          encryptedQuote: "a - b",
+          cypher: new Map([
+            ["c", "a"],
+            ["d", "b"],
+          ]),
+          answerCypher: new Map([
+            ["a", "c"],
+            ["b", ""],
+          ]),
+        },
+        {
+          type: ActionType.SetAnswer,
+          payload: { encoded: "b", decoded: "x" },
+        }
+      );
+
+      expect(state.win).toBe(false);
     });
   });
 
