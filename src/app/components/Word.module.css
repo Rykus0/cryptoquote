@@ -1,4 +1,6 @@
 .word {
-  background: var(--color-word-bg, #ccc);
+  display: flex;
   padding: 2px;
+
+  background: var(--color-word-bg, #ccc);
 }
