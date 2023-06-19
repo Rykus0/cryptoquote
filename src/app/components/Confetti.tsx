@@ -83,11 +83,12 @@ export default function Confetti(props: PropsWithChildren) {
       let theme = colorThemes[0];
 
       (function addConfetto() {
-        let confetto = new Confetto(theme);
-        console.log(confetto);
-        confetti.push(confetto);
-        container.current.appendChild(confetto.outer);
-        timer.current = setTimeout(addConfetto, spread * random());
+        if (container.current) {
+          let confetto = new Confetto(theme);
+          confetti.push(confetto);
+          container.current.appendChild(confetto.outer);
+          timer.current = setTimeout(addConfetto, spread * random());
+        }
       })();
 
       // Start the loop
