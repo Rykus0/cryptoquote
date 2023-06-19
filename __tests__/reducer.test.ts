@@ -244,6 +244,31 @@ describe("Reducer", () => {
 
       expect(state.win).toBe(false);
     });
+
+    it("should indicate if comlpete with mistakes", () => {
+      const state = reducer(
+        {
+          ...initialState,
+          quote: "c",
+          author: "d",
+          encryptedQuote: "a - b",
+          cypher: new Map([
+            ["c", "a"],
+            ["d", "b"],
+          ]),
+          answerCypher: new Map([
+            ["a", "c"],
+            ["b", ""],
+          ]),
+        },
+        {
+          type: ActionType.SetAnswer,
+          payload: { encoded: "b", decoded: "x" },
+        }
+      );
+
+      expect(state.completeWithError).toBe(true);
+    });
   });
 
   describe("SetCurrentLetter", () => {
