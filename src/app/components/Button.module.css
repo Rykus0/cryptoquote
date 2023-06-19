@@ -9,9 +9,15 @@
   color: white;
   background-color: #2bb9bf;
   transition: color 0.2s ease-out, background-color 0.2s ease-out;
+  font: inherit;
 }
 
-.button:hover, .button:focus {
+.button:hover:not(:disabled), .button:focus:not(:disabled) {
   color: var(--color-highlight-fg);
   background-color: var(--color-highlight-bg);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: .5;
 }
