@@ -96,7 +96,7 @@ export default function Home() {
   return (
     <main>
       <header>
-        <h1>Cryptoquote</h1>
+        <h1>Cryptoquotle</h1>
       </header>
       <div className={styles.controls}>
         <Button onClick={newGame}>New game</Button>
