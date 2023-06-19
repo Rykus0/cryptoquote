@@ -10,3 +10,7 @@
   --color-letter-bg: #f1fffb;
   --color-letter-fg: #222;
 }
+
+body {
+  font-family: Georgia, 'Times New Roman', Times, serif
+}
