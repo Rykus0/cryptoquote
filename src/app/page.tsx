@@ -100,8 +100,12 @@ export default function Home() {
       </header>
       <div className={styles.controls}>
         <Button onClick={newGame}>New game</Button>
-        <Button onClick={clearBoard}>Clear</Button>
-        <Button onClick={revealAll}>Give up</Button>
+        <Button onClick={clearBoard} disabled={state.win}>
+          Clear
+        </Button>
+        <Button onClick={revealAll} disabled={state.win}>
+          Give up
+        </Button>
         <Timer ms={state.msElapsed} />
       </div>
 
