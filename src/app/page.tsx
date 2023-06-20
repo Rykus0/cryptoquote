@@ -18,12 +18,8 @@ import Letter from "@/app/components/Letter";
 import Placeholder from "@/app/components/Placeholder";
 import Timer from "@/app/components/Timer";
 import Word from "@/app/components/Word";
-import reducer, {
-  initialState,
-  ActionType,
-  type State,
-  type Action,
-} from "@/app/state/reducer";
+import reducer, { initialState } from "@/app/state/reducer";
+import { ActionType, type State, type Action } from "@/app/state/types";
 
 async function getQuote() {
   const response = await fetch("https://api.quotable.io/random");
