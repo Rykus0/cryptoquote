@@ -15,6 +15,7 @@ import { focusNextEmptyInput, focusPreviousInput } from "@/utils/focus";
 import Button from "@/app/components/Button";
 import Confetti from "@/app/components/Confetti";
 import Letter from "@/app/components/Letter";
+import Placeholder from "@/app/components/Placeholder";
 import Timer from "@/app/components/Timer";
 import Word from "@/app/components/Word";
 import reducer, {
@@ -137,7 +138,11 @@ export default function Home() {
       ) : (
         <div ref={quoteRef} className={styles.quote}>
           {state.loading ? (
-            <span>loading...</span>
+            <>
+              <Placeholder height="4em" />
+              <Placeholder height="4em" />
+              <Placeholder height="4em" />
+            </>
           ) : (
             state.encryptedQuote
               .split(/\s+/)
