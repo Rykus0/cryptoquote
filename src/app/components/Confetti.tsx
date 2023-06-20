@@ -87,7 +87,7 @@ export default function Confetti(props: ConfettiProps) {
         if (container.current) {
           let confetto = new Confetto(theme);
           confetti.push(confetto);
-          container.current.appendChild(confetto.outer);
+          container.current.appendChild(confetto.element);
           timer.current = setTimeout(addConfetto, spread * random());
         }
       })();
@@ -101,7 +101,7 @@ export default function Confetti(props: ConfettiProps) {
 
         for (let i = confetti.length - 1; i >= 0; --i) {
           if (confetti[i].update(height, delta)) {
-            container.current?.removeChild(confetti[i].outer);
+            container.current?.removeChild(confetti[i].element);
             confetti.splice(i, 1);
           }
         }
@@ -130,6 +130,7 @@ export default function Confetti(props: ConfettiProps) {
 
 class Confetto {
   private frame: number = 0;
+  private outer: HTMLDivElement = document.createElement("div");
   private inner: HTMLDivElement = document.createElement("div");
   private axis: string =
     "rotate3D(" + cos(360 * random()) + "," + cos(360 * random()) + ",0,";
@@ -141,8 +142,6 @@ class Confetto {
   private dy: number = dyMin + dyMax * random();
   private splineX: number[] = createPoisson();
   private splineY: number[] = [];
-
-  outer: HTMLDivElement = document.createElement("div");
 
   constructor(theme: () => string) {
     this.outer.appendChild(this.inner);
@@ -172,6 +171,10 @@ class Confetto {
       this.splineY[i] = deviation * random();
     }
     this.splineY[0] = this.splineY[length] = deviation * random();
+  }
+
+  get element() {
+    return this.outer;
   }
 
   update(height: number, delta: number) {
