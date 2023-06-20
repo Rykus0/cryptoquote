@@ -167,7 +167,7 @@ function isCompleteWithError(state: State, newAnswer: Cypher) {
 }
 
 export function combineQuote(quote: string, author: string) {
-  return quote + " - " + author;
+  return quote + " — " + author;
 }
 
 export function normalizeQuote(quote: string) {
@@ -175,7 +175,7 @@ export function normalizeQuote(quote: string) {
 }
 
 function removeAccentsAndDiacritics(str: string) {
-  const str2 = str.replace(/[ø]/, "o").replace(/[Ø]/, "O");
+  const str2 = str.replace(/ø/g, "o").replace(/Ø/g, "O");
 
   if (str2.normalize) {
     return str2.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
