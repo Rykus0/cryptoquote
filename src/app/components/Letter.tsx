@@ -1,4 +1,9 @@
-import { useId, type ChangeEvent, type FocusEvent } from "react";
+import {
+  useId,
+  type ChangeEvent,
+  type FocusEvent,
+  type KeyboardEvent,
+} from "react";
 import styles from "./Letter.module.css";
 
 interface LetterProps {
@@ -7,6 +12,7 @@ interface LetterProps {
   occurrences: number;
   highlighted?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
   onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
 }
 
@@ -35,6 +41,7 @@ export default function Letter(props: LetterProps) {
             name={char}
             value={props.value}
             onChange={props.onChange}
+            onKeyDown={props.onKeyDown}
             onFocus={handleFocus}
           />
           <label htmlFor={id} className={styles.letterLabel}>
