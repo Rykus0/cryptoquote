@@ -7,10 +7,11 @@ import {
   useRef,
   type ChangeEvent,
   type FocusEvent,
+  type KeyboardEvent,
   type Reducer,
 } from "react";
 import styles from "./page.module.css";
-import { focusNextEmptyInput } from "@/utils/focus";
+import { focusNextEmptyInput, focusPreviousInput } from "@/utils/focus";
 import Button from "@/app/components/Button";
 import Confetti from "@/app/components/Confetti";
 import Letter from "@/app/components/Letter";
@@ -73,6 +74,16 @@ export default function Home() {
 
   function focusLetter(e: FocusEvent<HTMLInputElement>) {
     dispatch({ type: ActionType.SetCurrentLetter, payload: e.target.name });
+  }
+
+  function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+    if (
+      quoteRef.current &&
+      e.currentTarget.value === "" &&
+      e.key === "Backspace"
+    ) {
+      focusPreviousInput(quoteRef.current);
+    }
   }
 
   const tick = useCallback(() => {
@@ -139,6 +150,7 @@ export default function Home() {
                       occurrences={state.letterFrequency.get(char) || 0}
                       onChange={updateAnswer}
                       onFocus={focusLetter}
+                      onKeyDown={handleKeyDown}
                       highlighted={state.currentLetter === char}
                       value={state.answerCypher.get(char)}
                     />
