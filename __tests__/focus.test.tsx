@@ -1,63 +1,107 @@
 import { cleanup, render } from "@testing-library/react";
-import { focusNextEmptyInput } from "../src/utils/focus";
+import { focusNextEmptyInput, focusPreviousInput } from "../src/utils/focus";
 
-describe("focusNextEmptyInput", () => {
-  afterEach(cleanup);
+describe("focus utils", () => {
+  describe("focusNextEmptyInput", () => {
+    afterEach(cleanup);
 
-  it("should focus the next empty input", () => {
-    const { getByTestId, getByLabelText } = render(
-      <div data-testid="container">
-        <label htmlFor="first">first</label>
-        <input id="first" />
-        <label htmlFor="second">second</label>
-        <input id="second" />
-        <label htmlFor="third">third</label>
-        <input id="third" />
-      </div>
-    );
+    it("should focus the next empty input", () => {
+      const { getByTestId, getByLabelText } = render(
+        <div data-testid="container">
+          <label htmlFor="first">first</label>
+          <input id="first" />
+          <label htmlFor="second">second</label>
+          <input id="second" />
+          <label htmlFor="third">third</label>
+          <input id="third" />
+        </div>
+      );
 
-    getByLabelText("first").focus();
+      getByLabelText("first").focus();
 
-    focusNextEmptyInput(getByTestId("container") as HTMLDivElement);
+      focusNextEmptyInput(getByTestId("container") as HTMLDivElement);
 
-    expect(document.activeElement).toBe(getByLabelText("second"));
+      expect(document.activeElement).toBe(getByLabelText("second"));
+    });
+
+    it("should skip inputs with value", () => {
+      const { getByTestId, getByLabelText } = render(
+        <div data-testid="container">
+          <label htmlFor="first">first</label>
+          <input id="first" />
+          <label htmlFor="second">second</label>
+          <input id="second" defaultValue="sec" />
+          <label htmlFor="third">third</label>
+          <input id="third" />
+        </div>
+      );
+
+      getByLabelText("first").focus();
+
+      focusNextEmptyInput(getByTestId("container") as HTMLDivElement);
+
+      expect(document.activeElement).toBe(getByLabelText("third"));
+    });
+
+    it("should wrap around to the first input if no empty inputs after current", () => {
+      const { getByTestId, getByLabelText } = render(
+        <div data-testid="container">
+          <label htmlFor="first">first</label>
+          <input id="first" />
+          <label htmlFor="second">second</label>
+          <input id="second" />
+          <label htmlFor="third">third</label>
+          <input id="third" defaultValue="value" />
+        </div>
+      );
+
+      getByLabelText("second").focus();
+
+      focusNextEmptyInput(getByTestId("container") as HTMLDivElement);
+
+      expect(document.activeElement).toBe(getByLabelText("first"));
+    });
   });
 
-  it("should skip inputs with value", () => {
-    const { getByTestId, getByLabelText } = render(
-      <div data-testid="container">
-        <label htmlFor="first">first</label>
-        <input id="first" />
-        <label htmlFor="second">second</label>
-        <input id="second" defaultValue="sec" />
-        <label htmlFor="third">third</label>
-        <input id="third" />
-      </div>
-    );
+  describe("focusPreviousInput", () => {
+    afterEach(cleanup);
 
-    getByLabelText("first").focus();
+    it("should focus the previous input", () => {
+      const { getByTestId, getByLabelText } = render(
+        <div data-testid="container">
+          <label htmlFor="first">first</label>
+          <input id="first" />
+          <label htmlFor="second">second</label>
+          <input id="second" />
+          <label htmlFor="third">third</label>
+          <input id="third" />
+        </div>
+      );
 
-    focusNextEmptyInput(getByTestId("container") as HTMLDivElement);
+      getByLabelText("second").focus();
 
-    expect(document.activeElement).toBe(getByLabelText("third"));
-  });
+      focusPreviousInput(getByTestId("container") as HTMLDivElement);
 
-  it("should wrap around to the first input if no empty inputs after current", () => {
-    const { getByTestId, getByLabelText } = render(
-      <div data-testid="container">
-        <label htmlFor="first">first</label>
-        <input id="first" />
-        <label htmlFor="second">second</label>
-        <input id="second" />
-        <label htmlFor="third">third</label>
-        <input id="third" defaultValue="value" />
-      </div>
-    );
+      expect(document.activeElement).toBe(getByLabelText("first"));
+    });
 
-    getByLabelText("second").focus();
+    it("should wrap around to the last input if no inputs before focused", () => {
+      const { getByTestId, getByLabelText } = render(
+        <div data-testid="container">
+          <label htmlFor="first">first</label>
+          <input id="first" />
+          <label htmlFor="second">second</label>
+          <input id="second" />
+          <label htmlFor="third">third</label>
+          <input id="third" />
+        </div>
+      );
 
-    focusNextEmptyInput(getByTestId("container") as HTMLDivElement);
+      getByLabelText("first").focus();
 
-    expect(document.activeElement).toBe(getByLabelText("first"));
+      focusPreviousInput(getByTestId("container") as HTMLDivElement);
+
+      expect(document.activeElement).toBe(getByLabelText("third"));
+    });
   });
 });
