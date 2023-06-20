@@ -1,6 +1,6 @@
 // From https://codepen.io/bananascript/pen/EyZeWm?editors=0010
 
-import { useEffect, useRef, type PropsWithChildren } from "react";
+import { useEffect, useRef } from "react";
 import styles from "./Confetti.module.css";
 
 const random = Math.random;
@@ -9,7 +9,7 @@ const sin = Math.sin;
 const PI = Math.PI;
 const PI2 = PI * 2;
 
-const spread = 40;
+const defaultSpread = 40;
 const sizeMin = 3;
 const sizeMax = 12 - sizeMin;
 const eccentricity = 10;
@@ -70,7 +70,12 @@ function color(r: number, g: number, b: number) {
 const radius = 1 / eccentricity;
 const radius2 = radius + radius;
 
-export default function Confetti(props: PropsWithChildren) {
+type ConfettiProps = {
+  spread?: number;
+};
+
+export default function Confetti(props: ConfettiProps) {
+  const { spread = defaultSpread } = props;
   const container = useRef<HTMLDivElement>(null);
   const timer = useRef<NodeJS.Timeout | undefined>(undefined);
   const frame = useRef<number | undefined>(undefined);
@@ -122,18 +127,13 @@ export default function Confetti(props: PropsWithChildren) {
       timer.current = undefined;
       frame.current = undefined;
     };
-  }, [container]);
+  }, [container, spread]);
 
-  return (
-    <div ref={container} className={styles.confetti}>
-      {props.children}
-    </div>
-  );
+  return <div ref={container} className={styles.confetti} />;
 }
 
 class Confetto {
   private frame: number = 0;
-  outer: HTMLDivElement = document.createElement("div");
   private inner: HTMLDivElement = document.createElement("div");
   private axis: string =
     "rotate3D(" + cos(360 * random()) + "," + cos(360 * random()) + ",0,";
@@ -145,6 +145,8 @@ class Confetto {
   private dy: number = dyMin + dyMax * random();
   private splineX: number[] = createPoisson();
   private splineY: number[] = [];
+
+  outer: HTMLDivElement = document.createElement("div");
 
   constructor(theme: () => string) {
     this.outer.appendChild(this.inner);
