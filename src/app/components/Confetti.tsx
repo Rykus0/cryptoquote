@@ -66,10 +66,6 @@ function color(r: number, g: number, b: number) {
   return "rgb(" + r + "," + g + "," + b + ")";
 }
 
-// Create a 1D Maximal Poisson Disc over [0, 1]
-const radius = 1 / eccentricity;
-const radius2 = radius + radius;
-
 type ConfettiProps = {
   spread?: number;
 };
@@ -207,6 +203,10 @@ class Confetto {
 }
 
 function createPoisson() {
+  // Create a 1D Maximal Poisson Disc over [0, 1]
+  const radius = 1 / eccentricity;
+  const radius2 = radius + radius;
+
   // domain is the set of points which are still available to pick from
   // D = union{ [d_i, d_i+1] | i is even }
   let domain = [radius, 1 - radius];
@@ -214,58 +214,85 @@ function createPoisson() {
   let spline = [0, 1];
 
   while (measure) {
-    let dart = measure * random();
-    let i;
-    let l;
-    let interval;
-    let a;
-    let b;
-    let c;
-    let d;
+    const dart = findDart(domain, measure * random());
+    spline.push(dart);
 
-    // Find where dart lies
-    for (i = 0, l = domain.length, measure = 0; i < l; i += 2) {
-      a = domain[i];
-      b = domain[i + 1];
-      interval = b - a;
+    domain = updateDomain(domain, dart, radius);
 
-      if (dart < measure + interval) {
-        dart += a - measure;
-        spline.push(dart);
-        break;
-      }
-      measure += interval;
-    }
-    c = dart - radius;
-    d = dart + radius;
-
-    // Update the domain
-    for (i = domain.length - 1; i > 0; i -= 2) {
-      l = i - 1;
-      a = domain[l];
-      b = domain[i];
-
-      // c---d          c---d  Do nothing
-      //   c-----d  c-----d    Move interior
-      //   c--------------d    Delete interval
-      //         c--d          Split interval
-      //       a------b
-      if (a >= c && a < d)
-        if (b > d) domain[l] = d; // Move interior (Left case)
-        else domain.splice(l, 2);
-      // Delete interval
-      else if (a < c && b > c)
-        if (b <= d) domain[i] = c; // Move interior (Right case)
-        else domain.splice(i, 0, c, d); // Split interval
-    }
-
-    // Re-measure the domain
-    for (i = 0, l = domain.length, measure = 0; i < l; i += 2) {
-      measure += domain[i + 1] - domain[i];
-    }
+    measure = measureDomain(domain);
   }
 
   return spline.sort((a, b) => a - b);
+}
+
+function findDart(domain: number[], start: number) {
+  let dart = start;
+  let measure = 0;
+  let length = domain.length;
+  let interval;
+
+  for (let i = 0; i < length; i += 2) {
+    const a = domain[i];
+    const b = domain[i + 1];
+    interval = b - a;
+
+    if (dart < measure + interval) {
+      dart += a - measure;
+      break;
+    }
+    measure += interval;
+  }
+
+  return dart;
+}
+
+function updateDomain(domain: number[], dart: number, radius: number) {
+  let updatedDomain = [...domain];
+  const c = dart - radius;
+  const d = dart + radius;
+
+  for (let i = updatedDomain.length - 1; i > 0; i -= 2) {
+    const l = i - 1;
+    const a = updatedDomain[l];
+    const b = updatedDomain[i];
+
+    // c---d          c---d  Do nothing
+    //   c-----d  c-----d    Move interior
+    //   c--------------d    Delete interval
+    //         c--d          Split interval
+    //       a------b
+    if (a >= c && a < d) {
+      if (b > d) {
+        updatedDomain[l] = d; // Move interior (Left case)
+      } else {
+        updatedDomain.splice(l, 2);
+      }
+    } else if (a < c && b > c) {
+      // Delete interval
+      if (b <= d) {
+        updatedDomain[i] = c; // Move interior (Right case)
+      } else {
+        updatedDomain.splice(i, 0, c, d); // Split interval
+      }
+    }
+  }
+
+  return updatedDomain;
+}
+
+function measureDomain(domain: number[]) {
+  let measure = 0;
+  let length = domain.length;
+
+  for (let i = 0; i < length; i += 2) {
+    measure += getDomainInterval(domain, i);
+  }
+
+  return measure;
+}
+
+function getDomainInterval(domain: number[], index: number) {
+  return domain[index + 1] - domain[index];
 }
 
 // Cosine interpolation
