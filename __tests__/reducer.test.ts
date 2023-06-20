@@ -1,9 +1,9 @@
 import reducer, {
   initialState,
-  ActionType,
   normalizeQuote,
   combineQuote,
 } from "../src/app/state/reducer";
+import { ActionType } from "../src/app/state/types";
 import { applyCypher } from "../src/utils/cypher";
 
 describe("Reducer", () => {
