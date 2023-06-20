@@ -201,7 +201,7 @@ describe("Reducer", () => {
           ...initialState,
           quote: "c",
           author: "d",
-          encryptedQuote: "a - b",
+          encryptedQuote: "a — b",
           cypher: new Map([
             ["c", "a"],
             ["d", "b"],
@@ -226,7 +226,7 @@ describe("Reducer", () => {
           ...initialState,
           quote: "c",
           author: "d",
-          encryptedQuote: "a - b",
+          encryptedQuote: "a — b",
           cypher: new Map([
             ["c", "a"],
             ["d", "b"],
@@ -251,7 +251,7 @@ describe("Reducer", () => {
           ...initialState,
           quote: "c",
           author: "d",
-          encryptedQuote: "a - b",
+          encryptedQuote: "a — b",
           cypher: new Map([
             ["c", "a"],
             ["d", "b"],
