@@ -77,20 +77,12 @@ export default function Confetti(props: ConfettiProps) {
   const frame = useRef<number | undefined>(undefined);
 
   useEffect(() => {
-    let confetti: Confetto[] = [];
-
     if (container.current && !frame.current) {
-      // Add confetti
-      let theme = colorThemes[0];
-
-      (function addConfetto() {
-        if (container.current) {
-          let confetto = new Confetto(theme);
-          confetti.push(confetto);
-          container.current.appendChild(confetto.element);
-          timer.current = setTimeout(addConfetto, spread * random());
-        }
-      })();
+      let confetti: Confetto[] = populateConfetti(
+        container.current,
+        spread,
+        colorThemes[0]
+      );
 
       // Start the loop
       let prev: number | undefined = undefined;
@@ -126,6 +118,26 @@ export default function Confetti(props: ConfettiProps) {
   }, [container, spread]);
 
   return <div ref={container} className={styles.confetti} />;
+}
+
+function populateConfetti(
+  container: HTMLDivElement,
+  spread: number,
+  theme: () => string
+) {
+  let timer: NodeJS.Timeout | undefined = undefined;
+  const confetti: Confetto[] = [];
+
+  (function addConfetto() {
+    if (container) {
+      let confetto = new Confetto(theme);
+      confetti.push(confetto);
+      container.appendChild(confetto.element);
+      timer = setTimeout(addConfetto, spread * random());
+    }
+  })();
+
+  return confetti;
 }
 
 class Confetto {
