@@ -1,15 +1,9 @@
-// From https://codepen.io/bananascript/pen/EyZeWm?editors=0010
-
-import { useEffect, useRef } from "react";
-import styles from "./Confetti.module.css";
-
 const random = Math.random;
 const cos = Math.cos;
 const sin = Math.sin;
 const PI = Math.PI;
 const PI2 = PI * 2;
 
-const defaultSpread = 40;
 const sizeMin = 3;
 const sizeMax = 12 - sizeMin;
 const eccentricity = 10;
@@ -21,126 +15,7 @@ const dyMax = 0.18;
 const dThetaMin = 0.4;
 const dThetaMax = 0.7 - dThetaMin;
 
-const colorThemes = [
-  function () {
-    return color(
-      (200 * random()) | 0,
-      (200 * random()) | 0,
-      (200 * random()) | 0
-    );
-  },
-  function () {
-    const black = (200 * random()) | 0;
-    return color(200, black, black);
-  },
-  function () {
-    const black = (200 * random()) | 0;
-    return color(black, 200, black);
-  },
-  function () {
-    const black = (200 * random()) | 0;
-    return color(black, black, 200);
-  },
-  function () {
-    return color(200, 100, (200 * random()) | 0);
-  },
-  function () {
-    return color((200 * random()) | 0, 200, 200);
-  },
-  function () {
-    const black = (256 * random()) | 0;
-    return color(black, black, black);
-  },
-  function (): string {
-    return colorThemes[random() < 0.5 ? 1 : 2]();
-  },
-  function (): string {
-    return colorThemes[random() < 0.5 ? 3 : 5]();
-  },
-  function (): string {
-    return colorThemes[random() < 0.5 ? 2 : 4]();
-  },
-];
-
-function color(r: number, g: number, b: number) {
-  return "rgb(" + r + "," + g + "," + b + ")";
-}
-
-type ConfettiProps = {
-  spread?: number;
-};
-
-export default function Confetti(props: ConfettiProps) {
-  const { spread = defaultSpread } = props;
-  const container = useRef<HTMLDivElement>(null);
-  const timer = useRef<NodeJS.Timeout | undefined>(undefined);
-  const frame = useRef<number | undefined>(undefined);
-
-  useEffect(() => {
-    if (container.current && !frame.current) {
-      let confetti: Confetto[] = populateConfetti(
-        container.current,
-        spread,
-        colorThemes[0]
-      );
-
-      // Start the loop
-      let prev: number | undefined = undefined;
-      requestAnimationFrame(function loop(timestamp) {
-        let delta = prev ? timestamp - prev : 0;
-        prev = timestamp;
-        let height = window.innerHeight;
-
-        for (let i = confetti.length - 1; i >= 0; --i) {
-          if (confetti[i].update(height, delta)) {
-            container.current?.removeChild(confetti[i].element);
-            confetti.splice(i, 1);
-          }
-        }
-
-        if (timer.current || confetti.length) {
-          frame.current = requestAnimationFrame(loop);
-          return frame;
-        }
-
-        // Cleanup
-        if (container.current) {
-          document.body.removeChild(container.current);
-        }
-        frame.current = undefined;
-      });
-    }
-
-    return () => {
-      timer.current = undefined;
-      frame.current = undefined;
-    };
-  }, [container, spread]);
-
-  return <div ref={container} className={styles.confetti} />;
-}
-
-function populateConfetti(
-  container: HTMLDivElement,
-  spread: number,
-  theme: () => string
-) {
-  let timer: NodeJS.Timeout | undefined = undefined;
-  const confetti: Confetto[] = [];
-
-  (function addConfetto() {
-    if (container) {
-      let confetto = new Confetto(theme);
-      confetti.push(confetto);
-      container.appendChild(confetto.element);
-      timer = setTimeout(addConfetto, spread * random());
-    }
-  })();
-
-  return confetti;
-}
-
-class Confetto {
+export default class Confetto {
   private frame: number = 0;
   private outer: HTMLDivElement = document.createElement("div");
   private inner: HTMLDivElement = document.createElement("div");
