@@ -3,7 +3,7 @@
   flex-wrap: wrap;
   padding: 1em 0;
   column-gap: 1em;
-  row-gap: .5em;
+  row-gap: 0.5em;
 
   position: sticky;
   top: 0;
@@ -21,6 +21,17 @@
   flex-wrap: wrap;
   column-gap: 1em;
   row-gap: 0.5em;
+}
+
+.timer {
+  padding: 0.5em;
+
+  position: sticky;
+  top: 0;
+  right: 0;
+  text-align: right;
+
+  background-color: var(--color-page-bg);
 }
 
 .winQuote {
