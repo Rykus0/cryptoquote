@@ -12,8 +12,8 @@ import {
 } from "react";
 import styles from "./page.module.css";
 import { focusNextEmptyInput, focusPreviousInput } from "@/utils/focus";
-import Button from "@/app/components/Button";
 import Confetti from "@/app/components/Confetti";
+import Controls from "@/app/components/Controls";
 import Letter from "@/app/components/Letter";
 import Placeholder from "@/app/components/Placeholder";
 import Timer from "@/app/components/Timer";
@@ -50,6 +50,10 @@ export default function Home() {
 
   function revealAll() {
     dispatch({ type: ActionType.GiveUp });
+  }
+
+  function revealCurrent() {
+    // dispatch({ type: ActionType.GiveUp });
   }
 
   function updateAnswer(e: ChangeEvent<HTMLInputElement>) {
@@ -106,14 +110,17 @@ export default function Home() {
       <header>
         <h1>Cryptoquotle</h1>
       </header>
-      <div className={styles.controls}>
-        <Button onClick={newGame}>New game</Button>
-        <Button onClick={clearBoard} disabled={state.win || state.loading}>
-          Clear
-        </Button>
-        <Button onClick={revealAll} disabled={state.win || state.loading}>
-          Give up
-        </Button>
+
+      <Controls
+        gameOff={state.win || state.loading || false}
+        msElapsed={state.msElapsed}
+        onNewGame={newGame}
+        onClear={clearBoard}
+        onRevealAll={revealAll}
+        onRevealCurrent={revealCurrent}
+      />
+
+      <div className={styles.timer}>
         <Timer ms={state.msElapsed} />
       </div>
 
