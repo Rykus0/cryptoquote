@@ -7,14 +7,14 @@ import {
   type ChangeEvent,
   type Reducer,
 } from "react";
-import styles from "./page.module.css";
+import reducer, { initialState } from "@/app/state/reducer";
+import { ActionType, type Action, type State } from "@/app/state/types";
 import Confetti from "@/app/components/Confetti";
 import Controls from "@/app/components/Controls";
 import Placeholder from "@/app/components/Placeholder";
 import Timer from "@/app/components/Timer";
 import Cryptoquote from "@/app/components/Cryptoquote";
-import reducer, { initialState } from "@/app/state/reducer";
-import { ActionType, type State, type Action } from "@/app/state/types";
+import styles from "./page.module.css";
 
 async function getQuote() {
   const response = await fetch("https://api.quotable.io/random");
