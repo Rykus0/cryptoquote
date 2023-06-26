@@ -198,6 +198,30 @@ describe("Reducer", () => {
       expect(state.win).toBe(true);
     });
 
+    it("should not be case sensitive when determining the win condition", () => {
+      const state = reducer(
+        {
+          ...initialState,
+          quote: "c",
+          author: "d",
+          cypher: new Map([
+            ["c", "a"],
+            ["d", "b"],
+          ]),
+          answerCypher: new Map([
+            ["a", "c"],
+            ["b", ""],
+          ]),
+        },
+        {
+          type: ActionType.SetAnswer,
+          payload: { encoded: "b", decoded: "D" },
+        }
+      );
+
+      expect(state.win).toBe(true);
+    });
+
     it("should not update the win state if the answer does not solve the cypher", () => {
       const state = reducer(
         {
