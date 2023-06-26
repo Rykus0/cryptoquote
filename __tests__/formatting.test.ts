@@ -1,10 +1,4 @@
-import { combineQuote, normalizeQuote } from "../src/utils/formatting";
-
-describe("combineQuote", () => {
-  it("should combine quote and author separated by an emdash", () => {
-    expect(combineQuote("quote", "author")).toBe("quote — author");
-  });
-});
+import { normalizeQuote, getLetterFrequencies } from "../src/utils/formatting";
 
 describe("normalizeQuote", () => {
   it("should remove accents and diacritics", () => {
@@ -19,5 +13,16 @@ describe("normalizeQuote", () => {
     const quote = "I LOVE LAMP!";
 
     expect(normalizeQuote(quote)).toBe("i love lamp!");
+  });
+});
+
+describe("getLetterFrequencies", () => {
+  it("should return the count of each letter in the string", () => {
+    const letterFrequencies = getLetterFrequencies("abbccc");
+
+    expect(letterFrequencies.get("a")).toBe(1);
+    expect(letterFrequencies.get("b")).toBe(2);
+    expect(letterFrequencies.get("c")).toBe(3);
+    expect(letterFrequencies.get("d")).toBeUndefined;
   });
 });

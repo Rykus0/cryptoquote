@@ -4,20 +4,15 @@ import {
   useCallback,
   useEffect,
   useReducer,
-  useRef,
   type ChangeEvent,
-  type FocusEvent,
-  type KeyboardEvent,
   type Reducer,
 } from "react";
 import styles from "./page.module.css";
-import { focusNextEmptyInput, focusPreviousInput } from "@/utils/focus";
 import Confetti from "@/app/components/Confetti";
 import Controls from "@/app/components/Controls";
-import Letter from "@/app/components/Letter";
 import Placeholder from "@/app/components/Placeholder";
 import Timer from "@/app/components/Timer";
-import Word from "@/app/components/Word";
+import Cryptoquote from "@/app/components/Cryptoquote";
 import reducer, { initialState } from "@/app/state/reducer";
 import { ActionType, type State, type Action } from "@/app/state/types";
 
@@ -36,7 +31,6 @@ export default function Home() {
     reducer,
     initialState
   );
-  const quoteRef = useRef<HTMLDivElement>(null);
 
   async function newGame() {
     dispatch({ type: ActionType.Loading });
@@ -53,7 +47,7 @@ export default function Home() {
   }
 
   function revealCurrent() {
-    // dispatch({ type: ActionType.GiveUp });
+    // dispatch({ type: ActionType.RevealCurrent });
   }
 
   function updateAnswer(e: ChangeEvent<HTMLInputElement>) {
@@ -64,26 +58,6 @@ export default function Home() {
         type: ActionType.SetAnswer,
         payload: { encoded: e.target.name, decoded: value },
       });
-
-      if (value) {
-        window.requestAnimationFrame(
-          () => quoteRef.current && focusNextEmptyInput(quoteRef.current)
-        );
-      }
-    }
-  }
-
-  function focusLetter(e: FocusEvent<HTMLInputElement>) {
-    dispatch({ type: ActionType.SetCurrentLetter, payload: e.target.name });
-  }
-
-  function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
-    if (
-      quoteRef.current &&
-      e.currentTarget.value === "" &&
-      e.key === "Backspace"
-    ) {
-      focusPreviousInput(quoteRef.current);
     }
   }
 
@@ -125,7 +99,7 @@ export default function Home() {
       </div>
 
       {state.completeWithError && (
-        <p>
+        <p role="alert" aria-live="polite">
           <b>So close!</b> There is at least one mistake.
         </p>
       )}
@@ -139,34 +113,23 @@ export default function Home() {
           </figure>
         </div>
       ) : (
-        <div ref={quoteRef} className={styles.quote}>
+        <>
           {state.loading ? (
-            <>
+            <div className={styles.placeholder}>
               <Placeholder height="4em" />
               <Placeholder height="4em" />
               <Placeholder height="4em" />
-            </>
+            </div>
           ) : (
-            state.encryptedQuote
-              .split(/\s+/)
-              .map((word: string, wordIdx: number) => (
-                <Word key={`word-${word}-${wordIdx}`}>
-                  {word.split("").map((char: string, charIdx: number) => (
-                    <Letter
-                      key={`letter-${wordIdx}-${charIdx}`}
-                      char={char}
-                      occurrences={state.letterFrequency.get(char) || 0}
-                      onChange={updateAnswer}
-                      onFocus={focusLetter}
-                      onKeyDown={handleKeyDown}
-                      highlighted={state.currentLetter === char}
-                      value={state.answerCypher.get(char)}
-                    />
-                  ))}
-                </Word>
-              ))
+            <Cryptoquote
+              quote={state.quote}
+              author={state.author}
+              cypher={state.cypher}
+              userCypher={state.answerCypher}
+              onLetterChange={updateAnswer}
+            />
           )}
-        </div>
+        </>
       )}
     </main>
   );

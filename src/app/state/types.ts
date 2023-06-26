@@ -5,9 +5,6 @@ export type State = {
   answerCypher: Cypher;
   quote: string;
   author: string;
-  encryptedQuote: string;
-  letterFrequency: Map<string, number>;
-  currentLetter: string;
   loading?: boolean;
   win?: boolean;
   completeWithError?: boolean;
@@ -21,7 +18,6 @@ export enum ActionType {
   GiveUp = "giveUp",
   Loading = "loading",
   SetAnswer = "setAnswer",
-  SetCurrentLetter = "setCurrentLetter",
   Tick = "tick",
 }
 
@@ -37,5 +33,4 @@ export type Action =
       type: ActionType.SetAnswer;
       payload: { encoded: string; decoded: string };
     }
-  | { type: ActionType.SetCurrentLetter; payload: string }
   | { type: ActionType.Tick; payload: number };

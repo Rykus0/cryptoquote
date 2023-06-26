@@ -5,7 +5,7 @@ import {
   getReverseCypher,
   type Cypher,
 } from "@/utils/cypher";
-import { combineQuote, normalizeQuote } from "@/utils/formatting";
+import { normalizeQuote } from "@/utils/formatting";
 import { ActionType, type Action, type State } from "./types";
 
 export const initialState: State = {
@@ -13,9 +13,6 @@ export const initialState: State = {
   answerCypher: new Map(),
   quote: "",
   author: "",
-  encryptedQuote: "",
-  letterFrequency: new Map(),
-  currentLetter: "",
   loading: false,
   win: false,
   completeWithError: false,
@@ -39,11 +36,6 @@ export default function reducer(state: State, action: Action): State {
 
     case ActionType.NewGame:
       const cypher = generateCypher();
-      const combinedQuote = combineQuote(
-        action.payload.quote,
-        action.payload.author
-      );
-      const encrypted = applyCypher(normalizeQuote(combinedQuote), cypher);
 
       return {
         ...initialState,
@@ -51,8 +43,6 @@ export default function reducer(state: State, action: Action): State {
         answerCypher: createEmptyReverseCypher(cypher),
         quote: action.payload.quote,
         author: action.payload.author,
-        encryptedQuote: encrypted,
-        letterFrequency: getLetterFrequencies(encrypted),
         lastTick: Date.now(),
       };
 
@@ -94,14 +84,6 @@ export default function reducer(state: State, action: Action): State {
 
     // -------------------------------------
 
-    case ActionType.SetCurrentLetter:
-      return {
-        ...state,
-        currentLetter: action.payload,
-      };
-
-    // -------------------------------------
-
     case ActionType.GiveUp:
       return {
         ...state,
@@ -114,32 +96,32 @@ export default function reducer(state: State, action: Action): State {
 }
 
 function isWin(state: State, newAnswer: Cypher) {
+  const encryptedQuote = applyCypher(normalizeQuote(state.quote), state.cypher);
+  const encryptedAuthor = applyCypher(
+    normalizeQuote(state.author),
+    state.cypher
+  );
+
   return (
-    normalizeQuote(applyCypher(state.encryptedQuote, newAnswer)) ===
-    normalizeQuote(combineQuote(state.quote, state.author))
+    applyCypher(encryptedQuote, newAnswer) === normalizeQuote(state.quote) &&
+    applyCypher(encryptedAuthor, newAnswer) === normalizeQuote(state.author)
   );
 }
 
 function isCompleteWithError(state: State, newAnswer: Cypher) {
-  return (
-    !isWin(state, newAnswer) &&
-    applyCypher(state.encryptedQuote, newAnswer).length ===
-      combineQuote(state.quote, state.author).length
+  const encryptedQuote = applyCypher(normalizeQuote(state.quote), state.cypher);
+  const encryptedAuthor = applyCypher(
+    normalizeQuote(state.author),
+    state.cypher
   );
+  const quoteComplete =
+    applyCypher(encryptedQuote, newAnswer).length === state.quote.length;
+  const authorComplete =
+    applyCypher(encryptedAuthor, newAnswer).length === state.author.length;
+
+  return !isWin(state, newAnswer) && quoteComplete && authorComplete;
 }
 
 function createEmptyReverseCypher(cypher: Cypher) {
   return new Map(Array.from(cypher.values()).map((v) => [v, ""]));
-}
-
-function getLetterFrequencies(quote: string) {
-  return quote.split("").reduce((prev, letter) => {
-    if (prev.has(letter)) {
-      const count = prev.get(letter) ?? 0;
-      prev.set(letter, count + 1);
-    } else {
-      prev.set(letter, 1);
-    }
-    return prev;
-  }, new Map<string, number>());
 }
