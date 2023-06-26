@@ -1,5 +1,6 @@
 :root {
   --color-page-bg: #fff;
+  --color-page-fg: #303030;
 
   --color-highlight-bg: #90fde9;
   --color-highlight-fg: #000;
@@ -9,8 +10,32 @@
 
   --color-letter-bg: #f1fffb;
   --color-letter-fg: #222;
+
+  --color-button-bg: #2bb9bf;
+  --color-button-fg: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-page-bg: #303030;
+    --color-page-fg: #fff;
+
+    --color-highlight-bg: hsl(169, 33%, 49%);
+    --color-highlight-fg: #000;
+
+    --color-word-bg: #525b5c;
+    --color-word-fg: #fff;
+
+    --color-letter-bg: #7c8a85;
+    --color-letter-fg: #1e1e1e;
+
+    --color-button-bg: #1f5d5f;
+    --color-button-fg: #fff;
+  }
 }
 
 body {
-  font-family: Georgia, 'Times New Roman', Times, serif
+  font-family: Georgia, "Times New Roman", Times, serif;
+  background-color: var(--color-page-bg);
+  color: var(--color-page-fg);
 }

@@ -6,18 +6,19 @@
   text-align: center;
   text-decoration: none;
 
-  color: white;
-  background-color: #2bb9bf;
+  color: var(--color-button-fg);
+  background-color: var(--color-button-bg);
   transition: color 0.2s ease-out, background-color 0.2s ease-out;
   font: inherit;
 }
 
-.button:hover:not(:disabled), .button:focus:not(:disabled) {
+.button:hover:not(:disabled),
+.button:focus:not(:disabled) {
   color: var(--color-highlight-fg);
   background-color: var(--color-highlight-bg);
 }
 
 .button:disabled {
   cursor: not-allowed;
-  opacity: .5;
+  opacity: 0.5;
 }
