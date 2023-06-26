@@ -1,8 +1,5 @@
-import reducer, {
-  initialState,
-  normalizeQuote,
-  combineQuote,
-} from "../src/app/state/reducer";
+import reducer, { initialState } from "../src/app/state/reducer";
+import { combineQuote, normalizeQuote } from "../src/utils/formatting";
 import { ActionType } from "../src/app/state/types";
 import { applyCypher } from "../src/utils/cypher";
 
