@@ -35,7 +35,7 @@ export default function Confetti(props: ConfettiProps) {
     }
 
     return () => {
-      if (containerEl && document.contains(containerEl)) {
+      if (containerEl && document.body.contains(containerEl)) {
         document.body.removeChild(containerEl);
       }
     };
