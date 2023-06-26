@@ -1,15 +1,14 @@
 import {
+  useEffect,
   useRef,
   useState,
   type ChangeEvent,
   type FocusEvent,
   type KeyboardEvent,
-  useEffect,
 } from "react";
 import { applyCypher } from "@/utils/cypher";
 import { normalizeQuote, getLetterFrequencies } from "@/utils/formatting";
 import { focusNextEmptyInput, focusPreviousInput } from "@/utils/focus";
-import Letter from "@/app/components/Letter";
 import Word from "@/app/components/Word";
 import styles from "./Cryptoquote.module.css";
 
@@ -76,37 +75,29 @@ export default function Cryptoquote(props: CryptoquoteProps) {
       {
         <>
           {encryptedQuote.split(/\s+/).map((word: string, wordIdx: number) => (
-            <Word key={`quote-word-${word}-${wordIdx}`}>
-              {word.split("").map((char: string, charIdx: number) => (
-                <Letter
-                  key={`quote-letter-${wordIdx}-${charIdx}`}
-                  char={char}
-                  occurrences={letterFrequency.get(char) || 0}
-                  onChange={onLetterChange}
-                  onFocus={onLetterFocus}
-                  onKeyDown={onLetterKeyDown}
-                  highlighted={currentLetter === char}
-                  value={props.userCypher.get(char)}
-                />
-              ))}
-            </Word>
+            <Word
+              key={["quote", "word", word, wordIdx].join("-")}
+              value={word}
+              letterFrequency={letterFrequency}
+              onLetterChange={onLetterChange}
+              onLetterFocus={onLetterFocus}
+              onLetterKeyDown={onLetterKeyDown}
+              currentLetter={currentLetter}
+              letterValues={props.userCypher}
+            />
           ))}
           —
           {encryptedAuthor.split(/\s+/).map((word: string, wordIdx: number) => (
-            <Word key={`author-word-${word}-${wordIdx}`}>
-              {word.split("").map((char: string, charIdx: number) => (
-                <Letter
-                  key={`author-letter-${wordIdx}-${charIdx}`}
-                  char={char}
-                  occurrences={letterFrequency.get(char) || 0}
-                  onChange={onLetterChange}
-                  onFocus={onLetterFocus}
-                  onKeyDown={onLetterKeyDown}
-                  highlighted={currentLetter === char}
-                  value={props.userCypher.get(char)}
-                />
-              ))}
-            </Word>
+            <Word
+              key={["author", "word", word, wordIdx].join("-")}
+              value={word}
+              letterFrequency={letterFrequency}
+              onLetterChange={onLetterChange}
+              onLetterFocus={onLetterFocus}
+              onLetterKeyDown={onLetterKeyDown}
+              currentLetter={currentLetter}
+              letterValues={props.userCypher}
+            />
           ))}
         </>
       }
