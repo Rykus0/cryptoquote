@@ -86,10 +86,6 @@ describe("Reducer", () => {
       expect(state.lastTick).toBe(1000);
     });
 
-    it("should clear the current highlighted letter", () => {
-      expect(state.currentLetter).toBe("");
-    });
-
     it("should reset the loading state", () => {
       expect(state.loading).toBe(false);
     });
@@ -248,17 +244,6 @@ describe("Reducer", () => {
       );
 
       expect(state.completeWithError).toBe(true);
-    });
-  });
-
-  describe("SetCurrentLetter", () => {
-    it("should set the current letter to the given one", () => {
-      const state = reducer(initialState, {
-        type: ActionType.SetCurrentLetter,
-        payload: "a",
-      });
-
-      expect(state).toEqual({ ...state, currentLetter: "a" });
     });
   });
 
