@@ -1,4 +1,5 @@
 // From https://codepen.io/bananascript/pen/EyZeWm?editors=0010
+// which is a fork of https://codepen.io/Pillowfication/pen/PNEJbY
 
 import { useEffect, useRef } from "react";
 import styles from "./Confetti.module.css";
