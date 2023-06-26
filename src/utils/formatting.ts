@@ -1,7 +1,3 @@
-export function combineQuote(quote: string, author: string) {
-  return quote + " — " + author;
-}
-
 export function normalizeQuote(quote: string) {
   return removeAccentsAndDiacritics(quote).toLocaleLowerCase("en-US");
 }
@@ -14,4 +10,13 @@ function removeAccentsAndDiacritics(str: string) {
   }
 
   return str2;
+}
+
+export function getLetterFrequencies(value: string) {
+  return value.split("").reduce((prev, letter) => {
+    const count = prev.get(letter) ?? 0;
+    prev.set(letter, count + 1);
+
+    return prev;
+  }, new Map<string, number>());
 }

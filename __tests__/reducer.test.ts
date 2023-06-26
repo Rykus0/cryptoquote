@@ -1,5 +1,4 @@
 import reducer, { initialState } from "../src/app/state/reducer";
-import { combineQuote, normalizeQuote } from "../src/utils/formatting";
 import { ActionType } from "../src/app/state/types";
 import { applyCypher } from "../src/utils/cypher";
 
@@ -77,19 +76,6 @@ describe("Reducer", () => {
 
     it("should record the quote author", () => {
       expect(state.author).toBe(author);
-    });
-
-    it("should encrypt the quote", () => {
-      expect(state.encryptedQuote).toEqual(
-        applyCypher(
-          normalizeQuote(combineQuote(state.quote, state.author)),
-          state.cypher
-        )
-      );
-    });
-
-    it("should record the encrypted letter frequency", () => {
-      expect(state.letterFrequency.get(applyCypher("t", state.cypher))).toBe(7);
     });
 
     it("should reset the timer", () => {
@@ -198,7 +184,6 @@ describe("Reducer", () => {
           ...initialState,
           quote: "c",
           author: "d",
-          encryptedQuote: "a — b",
           cypher: new Map([
             ["c", "a"],
             ["d", "b"],
@@ -223,7 +208,6 @@ describe("Reducer", () => {
           ...initialState,
           quote: "c",
           author: "d",
-          encryptedQuote: "a — b",
           cypher: new Map([
             ["c", "a"],
             ["d", "b"],
@@ -248,7 +232,6 @@ describe("Reducer", () => {
           ...initialState,
           quote: "c",
           author: "d",
-          encryptedQuote: "a — b",
           cypher: new Map([
             ["c", "a"],
             ["d", "b"],
