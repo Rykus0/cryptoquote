@@ -103,8 +103,10 @@ function isWin(state: State, newAnswer: Cypher) {
   );
 
   return (
-    applyCypher(encryptedQuote, newAnswer) === normalizeQuote(state.quote) &&
-    applyCypher(encryptedAuthor, newAnswer) === normalizeQuote(state.author)
+    normalizeQuote(applyCypher(encryptedQuote, newAnswer)) ===
+      normalizeQuote(state.quote) &&
+    normalizeQuote(applyCypher(encryptedAuthor, newAnswer)) ===
+      normalizeQuote(state.author)
   );
 }
 
