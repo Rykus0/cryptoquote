@@ -14,6 +14,7 @@ export const initialState: State = {
   quote: "",
   author: "",
   loading: false,
+  error: false,
   win: false,
   completeWithError: false,
   msElapsed: 0,
@@ -59,8 +60,17 @@ export default function reducer(state: State, action: Action): State {
 
     case ActionType.Loading:
       return {
-        ...state,
+        ...initialState,
         loading: true,
+      };
+
+    // -------------------------------------
+
+    case ActionType.LoadError:
+      return {
+        ...state,
+        loading: false,
+        error: true,
         win: false,
         completeWithError: false,
       };

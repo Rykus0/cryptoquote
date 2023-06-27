@@ -5,8 +5,9 @@ export type State = {
   answerCypher: Cypher;
   quote: string;
   author: string;
-  loading?: boolean;
-  win?: boolean;
+  loading: boolean;
+  error: boolean;
+  win: boolean;
   completeWithError?: boolean;
   msElapsed: number;
   lastTick: number;
@@ -17,6 +18,7 @@ export enum ActionType {
   NewGame = "newGame",
   GiveUp = "giveUp",
   Loading = "loading",
+  LoadError = "loadError",
   SetAnswer = "setAnswer",
   Tick = "tick",
 }
@@ -29,6 +31,7 @@ export type Action =
     }
   | { type: ActionType.GiveUp }
   | { type: ActionType.Loading }
+  | { type: ActionType.LoadError }
   | {
       type: ActionType.SetAnswer;
       payload: { encoded: string; decoded: string };
