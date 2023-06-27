@@ -24,8 +24,9 @@ export const initialState: State = {
 export default function reducer(state: State, action: Action): State {
   switch (action.type) {
     case ActionType.Tick:
-      const elapsed =
-        document.hidden || state.win ? 0 : action.payload - state.lastTick;
+      const shouldNotTick =
+        document.hidden || state.loading || state.win || state.error;
+      const elapsed = shouldNotTick ? 0 : action.payload - state.lastTick;
 
       return {
         ...state,
