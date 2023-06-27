@@ -4,6 +4,7 @@ import {
   useCallback,
   useEffect,
   useReducer,
+  useRef,
   type ChangeEvent,
   type Reducer,
 } from "react";
@@ -19,13 +20,13 @@ import styles from "./page.module.css";
 
 async function getQuote() {
   try {
-  const response = await fetch("https://api.quotable.io/random");
-  const data = await response.json();
+    const response = await fetch("https://api.quotable.io/random");
+    const data = await response.json();
 
-  return {
-    quote: data.content,
-    author: data.author,
-  };
+    return {
+      quote: data.content,
+      author: data.author,
+    };
   } catch (error) {
     console.error(error);
   }
@@ -38,6 +39,7 @@ export default function Home() {
     reducer,
     initialState
   );
+  const timer = useRef<ReturnType<typeof setInterval>>();
 
   async function newGame() {
     dispatch({ type: ActionType.Loading });
@@ -75,14 +77,15 @@ export default function Home() {
 
   const tick = useCallback(() => {
     dispatch({ type: ActionType.Tick, payload: Date.now() });
-
-    if (!state.win) {
-      setTimeout(tick, 100);
-    }
-  }, [state.win]);
+  }, []);
 
   useEffect(() => {
-    tick();
+    timer.current = setInterval(tick, 100);
+
+    return () => {
+      window.clearInterval(timer.current);
+      timer.current = undefined;
+    };
   }, [tick]);
 
   useEffect(() => {
@@ -140,13 +143,13 @@ export default function Home() {
                   <Button onClick={newGame}>Try again</Button>
                 </p>
               ) : (
-            <Cryptoquote
-              quote={state.quote}
-              author={state.author}
-              cypher={state.cypher}
-              userCypher={state.answerCypher}
-              onLetterChange={updateAnswer}
-            />
+                <Cryptoquote
+                  quote={state.quote}
+                  author={state.author}
+                  cypher={state.cypher}
+                  userCypher={state.answerCypher}
+                  onLetterChange={updateAnswer}
+                />
               )}
             </>
           )}
