@@ -9,6 +9,7 @@ import {
 } from "react";
 import reducer, { initialState } from "@/app/state/reducer";
 import { ActionType, type Action, type State } from "@/app/state/types";
+import Button from "@/app/components/Button";
 import Confetti from "@/app/components/Confetti";
 import Controls from "@/app/components/Controls";
 import Placeholder from "@/app/components/Placeholder";
@@ -17,6 +18,7 @@ import Cryptoquote from "@/app/components/Cryptoquote";
 import styles from "./page.module.css";
 
 async function getQuote() {
+  try {
   const response = await fetch("https://api.quotable.io/random");
   const data = await response.json();
 
@@ -24,6 +26,11 @@ async function getQuote() {
     quote: data.content,
     author: data.author,
   };
+  } catch (error) {
+    console.error(error);
+  }
+
+  return null;
 }
 
 export default function Home() {
@@ -34,8 +41,13 @@ export default function Home() {
 
   async function newGame() {
     dispatch({ type: ActionType.Loading });
-    const { quote, author } = await getQuote();
-    dispatch({ type: ActionType.NewGame, payload: { quote, author } });
+    const quoteData = await getQuote();
+
+    if (quoteData) {
+      dispatch({ type: ActionType.NewGame, payload: quoteData });
+    } else {
+      dispatch({ type: ActionType.LoadError });
+    }
   }
 
   function clearBoard() {
@@ -86,7 +98,7 @@ export default function Home() {
       </header>
 
       <Controls
-        gameOff={state.win || state.loading || false}
+        gameOff={state.win || state.loading || state.error}
         msElapsed={state.msElapsed}
         onNewGame={newGame}
         onClear={clearBoard}
@@ -121,6 +133,13 @@ export default function Home() {
               <Placeholder height="4em" />
             </div>
           ) : (
+            <>
+              {state.error ? (
+                <p role="alert">
+                  There was an error getting the quote.{" "}
+                  <Button onClick={newGame}>Try again</Button>
+                </p>
+              ) : (
             <Cryptoquote
               quote={state.quote}
               author={state.author}
@@ -128,6 +147,8 @@ export default function Home() {
               userCypher={state.answerCypher}
               onLetterChange={updateAnswer}
             />
+              )}
+            </>
           )}
         </>
       )}
