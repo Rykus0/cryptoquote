@@ -1,6 +1,6 @@
 {
   "name": "cryptoquote",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,7 +9,7 @@
     "lint": "next lint",
     "test": "jest",
     "version": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s && git add CHANGELOG.md",
-    "changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s && git add CHANGELOG.md"
+    "changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 1 && git add CHANGELOG.md"
   },
   "dependencies": {
     "@vercel/analytics": "^1.0.1",
