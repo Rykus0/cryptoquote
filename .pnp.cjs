@@ -36,6 +36,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:20.2.5"],\
             ["@types/react", "npm:18.2.8"],\
             ["@types/react-dom", "npm:18.2.4"],\
+            ["@vercel/analytics", "npm:1.0.1"],\
             ["conventional-changelog-cli", "npm:3.0.0"],\
             ["eslint", "npm:8.42.0"],\
             ["eslint-config-next", "virtual:1ccf7af7e0a03e724fea4f3c30d9b065f4a6adec777d950c098d9e794d6922f11b4d3481c6ab11d34f94da7c2891867854c08362a6b58b08fd779eb8edcb23e6#npm:13.4.4"],\
@@ -2202,6 +2203,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@vercel/analytics", [\
+        ["npm:1.0.1", {\
+          "packageLocation": "./.yarn/cache/@vercel-analytics-npm-1.0.1-545fdc4bb4-6876e1d086.zip/node_modules/@vercel/analytics/",\
+          "packageDependencies": [\
+            ["@vercel/analytics", "npm:1.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["JSONStream", [\
         ["npm:1.3.5", {\
           "packageLocation": "./.yarn/cache/JSONStream-npm-1.3.5-1987f2e6dd-2605fa1242.zip/node_modules/JSONStream/",\
@@ -3469,6 +3479,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:20.2.5"],\
             ["@types/react", "npm:18.2.8"],\
             ["@types/react-dom", "npm:18.2.4"],\
+            ["@vercel/analytics", "npm:1.0.1"],\
             ["conventional-changelog-cli", "npm:3.0.0"],\
             ["eslint", "npm:8.42.0"],\
             ["eslint-config-next", "virtual:1ccf7af7e0a03e724fea4f3c30d9b065f4a6adec777d950c098d9e794d6922f11b4d3481c6ab11d34f94da7c2891867854c08362a6b58b08fd779eb8edcb23e6#npm:13.4.4"],\
