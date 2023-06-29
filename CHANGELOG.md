@@ -1,8 +1,15 @@
-## 1.0.0 (2023-06-28)
+## 1.1.0 (2023-06-29)
 
-* build: add yarn version plugin ([dd2e466](https://github.com/Rykus0/cryptoquote/commit/dd2e466))
-* build: install commitlint and husky ([a69716c](https://github.com/Rykus0/cryptoquote/commit/a69716c))
-* build: specify yarn as package manager ([a8e839d](https://github.com/Rykus0/cryptoquote/commit/a8e839d))
+* feat: improve logo icons ([6ac2bf9](https://github.com/Rykus0/cryptoquote/commit/6ac2bf9))
+* build: add script to update changelog when versioning ([d897fdf](https://github.com/Rykus0/cryptoquote/commit/d897fdf))
+* build: generate initial changelog ([d420dfa](https://github.com/Rykus0/cryptoquote/commit/d420dfa))
+* build: install commitlint and husky ([f768cb8](https://github.com/Rykus0/cryptoquote/commit/f768cb8))
+* build: install conventional changelog cli ([f586f2d](https://github.com/Rykus0/cryptoquote/commit/f586f2d))
+
+
+
+## 1.0.0 (2023-06-27)
+
 * chore: add license ([7aaa059](https://github.com/Rykus0/cryptoquote/commit/7aaa059))
 * chore: bump to v1.0.0 ([3a89f88](https://github.com/Rykus0/cryptoquote/commit/3a89f88))
 * chore: dependencies to dev deps ([ed0347f](https://github.com/Rykus0/cryptoquote/commit/ed0347f))
@@ -14,6 +21,8 @@
 * chore: update todo comments ([5d2c09c](https://github.com/Rykus0/cryptoquote/commit/5d2c09c))
 * chore: update todo comments ([e59a01f](https://github.com/Rykus0/cryptoquote/commit/e59a01f))
 * chore: update yarn ([c664af9](https://github.com/Rykus0/cryptoquote/commit/c664af9))
+* build: add yarn version plugin ([dd2e466](https://github.com/Rykus0/cryptoquote/commit/dd2e466))
+* build: specify yarn as package manager ([a8e839d](https://github.com/Rykus0/cryptoquote/commit/a8e839d))
 * refactor: address lint issues in confetti ([63e635f](https://github.com/Rykus0/cryptoquote/commit/63e635f))
 * refactor: allow configurable spread for confetti ([08507f8](https://github.com/Rykus0/cryptoquote/commit/08507f8))
 * refactor: break out and refactor confetti component ([66d0fee](https://github.com/Rykus0/cryptoquote/commit/66d0fee))
