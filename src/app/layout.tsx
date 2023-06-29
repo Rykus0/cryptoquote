@@ -7,7 +7,6 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "Cryptoquotle",
   description: "A classic game of decyphering encrypted famous quotes.",
-  icon: "/cryptoquotle.svg",
 };
 
 export default function RootLayout({
