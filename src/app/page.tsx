@@ -8,6 +8,7 @@ import {
   type ChangeEvent,
   type Reducer,
 } from "react";
+import Image from "next/image";
 import reducer, { initialState } from "@/app/state/reducer";
 import { ActionType, type Action, type State } from "@/app/state/types";
 import Button from "@/app/components/Button";
@@ -97,7 +98,15 @@ export default function Home() {
   return (
     <main>
       <header>
-        <h1>Cryptoquotle</h1>
+        <h1 className={styles.title}>
+          <Image
+            src="/cryptoquotle.svg"
+            alt="Cryptoquotle logo"
+            width="32"
+            height="32"
+          />{" "}
+          Cryptoquotle
+        </h1>
       </header>
 
       <Controls
