@@ -1,3 +1,11 @@
+## <small>1.1.1 (2023-06-29)</small>
+
+* fix: remove incorrect icon metadata ([34864f5](https://github.com/Rykus0/cryptoquote/commit/34864f5))
+* feat: install vercel analytics ([b500cdd](https://github.com/Rykus0/cryptoquote/commit/b500cdd))
+* chore: install vercel analytics ([b134f17](https://github.com/Rykus0/cryptoquote/commit/b134f17))
+
+
+
 ## 1.1.0 (2023-06-29)
 
 * feat: improve logo icons ([6ac2bf9](https://github.com/Rykus0/cryptoquote/commit/6ac2bf9))
