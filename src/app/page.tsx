@@ -98,18 +98,6 @@ export default function Home() {
 
   return (
     <main>
-      <header>
-        <h1 className={styles.title}>
-          <Image
-            src="/cryptoquotle.svg"
-            alt="Cryptoquotle logo"
-            width="32"
-            height="32"
-          />{" "}
-          Cryptoquotle
-        </h1>
-      </header>
-
       <Controls
         gameOff={state.win || state.loading || state.error}
         msElapsed={state.msElapsed}
