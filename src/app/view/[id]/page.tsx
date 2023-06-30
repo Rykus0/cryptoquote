@@ -21,6 +21,12 @@ export async function generateMetadata(props: ViewProps) {
       description: content,
       url: `https://${domain}/view/${props.params.id}`,
       type: "website",
+      images: [
+        {
+          url: `https://${domain}/screenshot?id=${props.params.id}`,
+          alt: `${content} - ${author}`,
+        },
+      ],
     },
   };
 }
