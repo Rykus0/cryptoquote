@@ -14,9 +14,10 @@ import { ActionType, type Action, type State } from "@/app/state/types";
 import Button from "@/app/components/Button";
 import Confetti from "@/app/components/Confetti";
 import Controls from "@/app/components/Controls";
-import Placeholder from "@/app/components/Placeholder";
-import Timer from "@/app/components/Timer";
 import Cryptoquote from "@/app/components/Cryptoquote";
+import Placeholder from "@/app/components/Placeholder";
+import Quote from "@/app/components/Quote";
+import Timer from "@/app/components/Timer";
 import styles from "./page.module.css";
 
 async function getQuote() {
@@ -131,10 +132,7 @@ export default function Home() {
       {state.win ? (
         <div>
           <Confetti />
-          <figure className={styles.winQuote}>
-            <blockquote>{state.quote}</blockquote>
-            <figcaption>&mdash; {state.author}</figcaption>
-          </figure>
+          <Quote quote={state.quote} author={state.author} />
         </div>
       ) : (
         <>
