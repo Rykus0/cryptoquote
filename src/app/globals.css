@@ -32,6 +32,14 @@
     --color-button-bg: #1f5d5f;
     --color-button-fg: #fff;
   }
+
+  a:link {
+    color: #57aafd;
+  }
+
+  a:visited {
+    color: #f05dd9;
+  }
 }
 
 body {
