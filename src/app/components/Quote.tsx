@@ -7,11 +7,9 @@ type QuoteProps = {
 
 export default function Quote(props: QuoteProps) {
   return (
-    <div>
-      <figure className={styles.quote}>
-        <blockquote>{props.quote}</blockquote>
-        <figcaption>&mdash; {props.author}</figcaption>
-      </figure>
-    </div>
+    <figure className={styles.quote}>
+      <blockquote>{props.quote}</blockquote>
+      <figcaption>&mdash; {props.author}</figcaption>
+    </figure>
   );
 }
