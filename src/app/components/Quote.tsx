@@ -2,14 +2,14 @@ import styles from "./Quote.module.css";
 
 type QuoteProps = {
   quote: string;
-  author: string;
+  author?: string;
 };
 
 export default function Quote(props: QuoteProps) {
   return (
     <figure className={styles.quote}>
       <blockquote>{props.quote}</blockquote>
-      <figcaption>&mdash; {props.author}</figcaption>
+      <figcaption>&mdash; {props.author ?? "Anonymous"}</figcaption>
     </figure>
   );
 }
