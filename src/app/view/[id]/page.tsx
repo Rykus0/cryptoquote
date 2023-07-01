@@ -20,6 +20,11 @@ export async function generateMetadata(props: ViewProps) {
       description: content,
       url: `https://${domain}/view/${props.params.id}`,
       type: "website",
+      images: [
+        {
+          url: `https://${domain}/cryptoquotle.svg`,
+        },
+      ],
     },
   };
 }
