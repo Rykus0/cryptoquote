@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Metadata, ResolvingMetadata } from "next";
 import Quote from "@/app/components/Quote";
 
 type ViewParams = {
