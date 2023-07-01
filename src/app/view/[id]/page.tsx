@@ -22,7 +22,10 @@ export async function generateMetadata(props: ViewProps) {
       type: "website",
       images: [
         {
-          url: `https://${domain}/cryptoquotle.svg`,
+          url: `https://${domain}/cryptoquotle.png`,
+          width: 180,
+          height: 180,
+          alt: "Online Cryptoquote Game",
         },
       ],
     },
