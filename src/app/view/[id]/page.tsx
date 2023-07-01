@@ -10,7 +10,7 @@ type ViewProps = {
   params: ViewParams;
 };
 
-const domain = "cryptoquote-five.vercel.app";
+const domain = window.location.host;
 
 export async function generateMetadata(props: ViewProps) {
   const { content, author } = await getData(props.params.id);
