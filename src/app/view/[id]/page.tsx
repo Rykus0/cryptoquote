@@ -9,8 +9,7 @@ type ViewProps = {
   params: ViewParams;
 };
 
-// const domain = "cryptoquote-five.vercel.app";
-const domain = "cryptoquote-git-feat-48-og-meta-rykus0.vercel.app";
+const domain = "cryptoquote-five.vercel.app";
 
 export async function generateMetadata(props: ViewProps) {
   const { content, author } = await getData(props.params.id);
@@ -21,12 +20,6 @@ export async function generateMetadata(props: ViewProps) {
       description: content,
       url: `https://${domain}/view/${props.params.id}`,
       type: "website",
-      images: [
-        {
-          url: `https://${domain}/screenshot?id=${props.params.id}`,
-          alt: `${content} - ${author}`,
-        },
-      ],
     },
   };
 }
