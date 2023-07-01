@@ -10,10 +10,9 @@ type ViewProps = {
   params: ViewParams;
 };
 
-const domain = window.location.host;
-
 export async function generateMetadata(props: ViewProps) {
   const { content, author } = await getData(props.params.id);
+  const domain = window ? window.location.host : "cryptoquote-five.vercel.app";
 
   return {
     openGraph: {
