@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Button from "@/app/components/Button";
+import ShareIcon from "@/app/components/icons/ShareIcon";
 
 type ShareProps = {
   content: string;
@@ -39,8 +40,10 @@ export default function Share(props: ShareProps) {
 
   return (
     <div>
-      <Button onClick={share}>Share</Button>
-      <div role="status" aria-live="polite">
+      <Button onClick={share}>
+        <ShareIcon />
+        Share
+      </Button>
         {message}
       </div>
     </div>
