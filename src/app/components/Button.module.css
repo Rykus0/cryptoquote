@@ -1,7 +1,9 @@
 .button {
-  display: inline-block;
+  display: inline-flex;
   padding: 1em 1.618em;
   border: none;
+  align-items: center;
+  column-gap: 0.5em;
 
   text-align: center;
   text-decoration: none;
@@ -21,4 +23,9 @@
 .button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+.button > svg {
+  width: 1em;
+  height: 1em;
 }
