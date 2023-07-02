@@ -44,8 +44,9 @@ export default function Share(props: ShareProps) {
         <ShareIcon />
         Share
       </Button>
+      <p role="status" aria-live="polite">
         {message}
-      </div>
+      </p>
     </div>
   );
 }
