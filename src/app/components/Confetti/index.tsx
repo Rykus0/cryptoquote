@@ -66,7 +66,7 @@ function updateConfetti(confetti: Confetto[], container: HTMLDivElement) {
     }
 
     // Cleanup
-    if (container && document.contains(container)) {
+    if (container && document.body.contains(container)) {
       document.body.removeChild(container);
     }
   });
