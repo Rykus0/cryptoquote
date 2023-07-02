@@ -16,6 +16,7 @@ import Confetti from "@/app/components/Confetti";
 import Controls from "@/app/components/Controls";
 import Cryptoquote from "@/app/components/Cryptoquote";
 import Placeholder from "@/app/components/Placeholder";
+import Share from "@/app/components/Share";
 import Quote from "@/app/components/Quote";
 import Timer from "@/app/components/Timer";
 import styles from "./page.module.css";
@@ -121,6 +122,7 @@ export default function Home() {
         <div>
           <Confetti />
           <Quote quote={state.quote} author={state.author} />
+          <Share content={`${state.quote} — ${state.author}`} />
         </div>
       ) : (
         <>
