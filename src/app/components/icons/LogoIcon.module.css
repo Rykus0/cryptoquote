@@ -1,0 +1,18 @@
+.logoIcon path,
+.logoIcon rect {
+  fill: black;
+}
+
+.logoIcon circle {
+  stroke: black;
+}
+
+@media (prefers-color-scheme: dark) {
+  .logoIcon path,
+  .logoIcon rect {
+    fill: white;
+  }
+  .logoIcon circle {
+    stroke: white;
+  }
+}
