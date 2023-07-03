@@ -8,7 +8,6 @@ import {
   type ChangeEvent,
   type Reducer,
 } from "react";
-import Image from "next/image";
 import reducer, { initialState } from "@/app/state/reducer";
 import { ActionType, type Action, type State } from "@/app/state/types";
 import Button from "@/app/components/Button";
@@ -63,10 +62,6 @@ export default function Home() {
     dispatch({ type: ActionType.GiveUp });
   }
 
-  function revealCurrent() {
-    // dispatch({ type: ActionType.RevealCurrent });
-  }
-
   function updateAnswer(e: ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
 
@@ -105,7 +100,6 @@ export default function Home() {
         onNewGame={newGame}
         onClear={clearBoard}
         onRevealAll={revealAll}
-        onRevealCurrent={revealCurrent}
       />
 
       <div className={styles.timer}>
