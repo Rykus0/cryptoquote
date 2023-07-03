@@ -8,8 +8,9 @@ import {
   type ChangeEvent,
   type Reducer,
 } from "react";
-import reducer, { initialState } from "@/app/state/reducer";
+import reducer, { getInitialState } from "@/app/state/reducer";
 import { ActionType, type Action, type State } from "@/app/state/types";
+import { loadGame } from "@/app/state/storage";
 import Button from "@/app/components/Button";
 import Confetti from "@/app/components/Confetti";
 import Controls from "@/app/components/Controls";
@@ -39,7 +40,7 @@ async function getQuote() {
 export default function Home() {
   const [state, dispatch] = useReducer<Reducer<State, Action>>(
     reducer,
-    initialState
+    getInitialState()
   );
   const timer = useRef<ReturnType<typeof setInterval>>();
 
@@ -87,9 +88,11 @@ export default function Home() {
   }, [tick]);
 
   useEffect(() => {
-    (async function start() {
-      await newGame();
-    })();
+    if (!loadGame()) {
+      (async function start() {
+        await newGame();
+      })();
+    }
   }, []);
 
   return (
