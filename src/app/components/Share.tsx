@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, memo } from "react";
 import Button from "@/app/components/Button";
 import ShareIcon from "@/app/components/icons/ShareIcon";
 
@@ -8,7 +8,7 @@ type ShareProps = {
   content: string;
 };
 
-export default function Share(props: ShareProps) {
+export function Share(props: ShareProps) {
   const [message, setMessage] = useState<string>("");
 
   async function share() {
@@ -50,3 +50,5 @@ export default function Share(props: ShareProps) {
     </div>
   );
 }
+
+export default memo(Share);

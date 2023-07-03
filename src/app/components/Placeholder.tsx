@@ -1,3 +1,4 @@
+import { memo } from "react";
 import styles from "./Placeholder.module.css";
 
 type PlaceholderProps = {
@@ -5,7 +6,7 @@ type PlaceholderProps = {
   width?: string;
 };
 
-export default function placeholder(props: PlaceholderProps) {
+export function Placeholder(props: PlaceholderProps) {
   return (
     <div
       role="status"
@@ -18,3 +19,5 @@ export default function placeholder(props: PlaceholderProps) {
     />
   );
 }
+
+export default memo(Placeholder);

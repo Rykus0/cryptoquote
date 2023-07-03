@@ -1,3 +1,4 @@
+import { memo } from "react";
 import styles from "./Quote.module.css";
 
 type QuoteProps = {
@@ -5,7 +6,7 @@ type QuoteProps = {
   author?: string;
 };
 
-export default function Quote(props: QuoteProps) {
+export function Quote(props: QuoteProps) {
   return (
     <figure className={styles.quote}>
       <blockquote>{props.quote}</blockquote>
@@ -13,3 +14,5 @@ export default function Quote(props: QuoteProps) {
     </figure>
   );
 }
+
+export default memo(Quote);

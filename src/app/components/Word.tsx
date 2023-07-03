@@ -1,4 +1,9 @@
-import { type ChangeEvent, type FocusEvent, type KeyboardEvent } from "react";
+import {
+  memo,
+  type ChangeEvent,
+  type FocusEvent,
+  type KeyboardEvent,
+} from "react";
 import Letter from "@/app/components/Letter";
 import styles from "./Word.module.css";
 
@@ -12,7 +17,7 @@ type WordProps = {
   letterValues: Map<string, string>;
 };
 
-export default function Word(props: WordProps) {
+export function Word(props: WordProps) {
   return (
     <span className={styles.word}>
       {props.value.split("").map((char: string, charIdx: number) => (
@@ -30,3 +35,5 @@ export default function Word(props: WordProps) {
     </span>
   );
 }
+
+export default memo(Word);
