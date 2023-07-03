@@ -8,7 +8,6 @@ type ControlsProps = {
   onNewGame: () => void;
   onClear: () => void;
   onRevealAll: () => void;
-  onRevealCurrent: () => void;
 };
 
 export default function Controls(props: ControlsProps) {
