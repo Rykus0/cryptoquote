@@ -11,7 +11,7 @@ export default function LogoIcon() {
       aria-hidden="true"
     >
       <title>Cryptoquotle Logo</title>
-      <circle cx="56" cy="53" r="36" stroke="black" stroke-width="12" />
+      <circle cx="56" cy="53" r="36" stroke="black" strokeWidth="12" />
       <rect
         x="74.3684"
         y="59.5534"
@@ -45,7 +45,7 @@ export default function LogoIcon() {
         <path d="M23 25H76L56 53L76 81H56H23V25Z" />
       </mask>
       <g mask="url(#mask0_1_2)">
-        <circle cx="56" cy="53" r="22" stroke-width="12" />
+        <circle cx="56" cy="53" r="22" strokeWidth="12" />
       </g>
     </svg>
   );
