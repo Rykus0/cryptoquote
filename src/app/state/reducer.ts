@@ -7,8 +7,13 @@ import {
 } from "@/utils/cypher";
 import { normalizeQuote } from "@/utils/formatting";
 import { ActionType, type Action, type State } from "./types";
+import { deleteGame, loadGame, saveGame } from "./storage";
 
-export const initialState: State = {
+// TODO
+// - Return initial state from a function:
+//   - Check for saved game on load and return state if present
+
+const initialState: State = {
   cypher: generateCypher(),
   answerCypher: new Map(),
   quote: "",
@@ -20,6 +25,12 @@ export const initialState: State = {
   msElapsed: 0,
   lastTick: Date.now(),
 };
+
+export function getInitialState(): State {
+  const gameData = loadGame();
+
+  return gameData ? gameData : initialState;
+}
 
 export default function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -39,7 +50,7 @@ export default function reducer(state: State, action: Action): State {
     case ActionType.NewGame:
       const cypher = generateCypher();
 
-      return {
+      const newState = {
         ...initialState,
         cypher: cypher,
         answerCypher: createEmptyReverseCypher(cypher),
@@ -47,6 +58,10 @@ export default function reducer(state: State, action: Action): State {
         author: action.payload.author,
         lastTick: Date.now(),
       };
+
+      saveGame(newState);
+
+      return newState;
 
     // -------------------------------------
 
@@ -79,23 +94,35 @@ export default function reducer(state: State, action: Action): State {
     // -------------------------------------
 
     case ActionType.SetAnswer:
-      if (state.win) return state;
+      if (state.win) {
+        return state;
+      }
 
       const newAnswer = new Map(state.answerCypher);
 
       clearCypherValue(newAnswer, action.payload.decoded);
       newAnswer.set(action.payload.encoded, action.payload.decoded);
 
-      return {
+      const answerState = {
         ...state,
         answerCypher: newAnswer,
         win: isWin(state, newAnswer),
         completeWithError: isCompleteWithError(state, newAnswer),
       };
 
+      if (answerState.win) {
+        deleteGame();
+      } else {
+        saveGame(answerState);
+      }
+
+      return answerState;
+
     // -------------------------------------
 
     case ActionType.GiveUp:
+      deleteGame();
+
       return {
         ...state,
         answerCypher: getReverseCypher(state.cypher),
