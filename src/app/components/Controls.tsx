@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Button from "@/app/components/Button";
 import styles from "./Controls.module.css";
 
@@ -10,7 +11,7 @@ type ControlsProps = {
   onRevealAll: () => void;
 };
 
-export default function Controls(props: ControlsProps) {
+export function Controls(props: ControlsProps) {
   return (
     <div className={styles.controls}>
       <Button onClick={props.onNewGame}>New game</Button>
@@ -23,3 +24,5 @@ export default function Controls(props: ControlsProps) {
     </div>
   );
 }
+
+export default memo(Controls);

@@ -2,6 +2,7 @@ import {
   useEffect,
   useRef,
   useState,
+  memo,
   type ChangeEvent,
   type FocusEvent,
   type KeyboardEvent,
@@ -22,7 +23,7 @@ type CryptoquoteProps = {
   onLetterChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function Cryptoquote(props: CryptoquoteProps) {
+export function Cryptoquote(props: CryptoquoteProps) {
   const quoteRef = useRef<HTMLDivElement>(null);
   const [encryptedQuote, setEncryptedQuote] = useState<string>("");
   const [encryptedAuthor, setEncryptedAuthor] = useState<string>("");
@@ -104,3 +105,5 @@ export default function Cryptoquote(props: CryptoquoteProps) {
     </div>
   );
 }
+
+export default memo(Cryptoquote);
