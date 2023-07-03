@@ -3,14 +3,14 @@ import { type State } from "./types";
 const STORAGE_KEY = "savedGame";
 
 export function saveGame(data: State) {
-  if (localStorage) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data, replacer));
+  if (window && window.localStorage) {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data, replacer));
   }
 }
 
 export function loadGame(): State | null {
-  if (localStorage) {
-    const data = localStorage.getItem(STORAGE_KEY);
+  if (window && window.localStorage) {
+    const data = window.localStorage.getItem(STORAGE_KEY);
 
     if (data) {
       return JSON.parse(data, reviver);
@@ -21,8 +21,8 @@ export function loadGame(): State | null {
 }
 
 export function deleteGame() {
-  if (localStorage) {
-    localStorage.removeItem(STORAGE_KEY);
+  if (window && window.localStorage) {
+    window.localStorage.removeItem(STORAGE_KEY);
   }
 }
 
