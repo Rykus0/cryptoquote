@@ -1,6 +1,7 @@
+import { memo } from "react";
 import styles from "./LogoIcon.module.css";
 
-export default function LogoIcon() {
+export function LogoIcon() {
   return (
     <svg
       viewBox="0 0 128 128"
@@ -50,3 +51,5 @@ export default function LogoIcon() {
     </svg>
   );
 }
+
+export default memo(LogoIcon);

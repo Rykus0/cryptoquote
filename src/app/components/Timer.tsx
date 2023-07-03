@@ -1,10 +1,11 @@
+import { memo } from "react";
 import styles from "./Timer.module.css";
 
 type TimerProps = {
   ms: number;
 };
 
-export default function Timer(props: TimerProps) {
+export function Timer(props: TimerProps) {
   const { hours, minutes, seconds } = getHMSFromMs(props.ms);
 
   return (
@@ -29,3 +30,5 @@ function getHMSFromMs(ms: number) {
 function getPaddedNumber(num: number) {
   return num.toString().padStart(2, "0");
 }
+
+export default memo(Timer);

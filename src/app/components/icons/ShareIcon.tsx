@@ -1,4 +1,6 @@
-export default function ShareIcon() {
+import { memo } from "react";
+
+export function ShareIcon() {
   return (
     <svg
       viewBox="0 0 128 128"
@@ -22,3 +24,5 @@ export default function ShareIcon() {
     </svg>
   );
 }
+
+export default memo(ShareIcon);

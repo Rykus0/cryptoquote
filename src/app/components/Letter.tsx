@@ -1,5 +1,6 @@
 import {
   useId,
+  memo,
   type ChangeEvent,
   type FocusEvent,
   type KeyboardEvent,
@@ -16,7 +17,7 @@ interface LetterProps {
   onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
 }
 
-export default function Letter(props: LetterProps) {
+export function Letter(props: LetterProps) {
   const { char } = props;
   const isAlpha = /[a-zA-Z]/.test(char);
   const id = useId();
@@ -60,3 +61,5 @@ export default function Letter(props: LetterProps) {
     </span>
   );
 }
+
+export default memo(Letter);

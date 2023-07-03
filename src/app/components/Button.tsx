@@ -1,7 +1,7 @@
-import { type ButtonHTMLAttributes } from "react";
+import { memo, type ButtonHTMLAttributes } from "react";
 import styles from "./Button.module.css";
 
-export default function Button(props: ButtonHTMLAttributes<HTMLButtonElement>) {
+export function Button(props: ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
       type="button"
@@ -13,3 +13,5 @@ export default function Button(props: ButtonHTMLAttributes<HTMLButtonElement>) {
     </button>
   );
 }
+
+export default memo(Button);
