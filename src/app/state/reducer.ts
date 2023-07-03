@@ -29,7 +29,14 @@ const initialState: State = {
 export function getInitialState(): State {
   const gameData = loadGame();
 
-  return gameData ? gameData : initialState;
+  if (gameData) {
+    return {
+      ...gameData,
+      lastTick: Date.now(),
+    };
+  }
+
+  return initialState;
 }
 
 export default function reducer(state: State, action: Action): State {
