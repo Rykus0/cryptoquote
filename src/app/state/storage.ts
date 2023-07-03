@@ -3,27 +3,29 @@ import { type State } from "./types";
 const STORAGE_KEY = "savedGame";
 
 export function saveGame(data: State) {
-  if (window && window.localStorage) {
+  try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data, replacer));
-  }
+  } catch (error) {}
 }
 
 export function loadGame(): State | null {
-  if (window && window.localStorage) {
+  try {
     const data = window.localStorage.getItem(STORAGE_KEY);
 
     if (data) {
       return JSON.parse(data, reviver);
     }
+  } catch (error) {
+    return null;
   }
 
   return null;
 }
 
 export function deleteGame() {
-  if (window && window.localStorage) {
+  try {
     window.localStorage.removeItem(STORAGE_KEY);
-  }
+  } catch (error) {}
 }
 
 function replacer(key: string, value: unknown) {
