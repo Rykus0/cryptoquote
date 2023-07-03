@@ -1,5 +1,5 @@
 import "./globals.css";
-import Image from "next/image";
+import LogoIcon from "@/app/components/icons/LogoIcon";
 import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -35,12 +35,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <header>
           <h1>
-            <Image
-              src="/cryptoquotle.svg"
-              alt="Cryptoquotle logo"
-              width="32"
-              height="32"
-            />{" "}
+            <LogoIcon />
             Cryptoquotle
           </h1>
         </header>
