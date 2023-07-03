@@ -4,7 +4,6 @@ import styles from "./Controls.module.css";
 
 type ControlsProps = {
   gameOff: boolean;
-  msElapsed: number;
 
   onNewGame: () => void;
   onClear: () => void;

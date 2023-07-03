@@ -99,7 +99,6 @@ export default function Home() {
     <main>
       <Controls
         gameOff={state.win || state.loading || state.error}
-        msElapsed={state.msElapsed}
         onNewGame={newGame}
         onClear={clearBoard}
         onRevealAll={revealAll}
