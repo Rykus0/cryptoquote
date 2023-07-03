@@ -46,11 +46,15 @@ export default function reducer(state: State, action: Action): State {
         document.hidden || state.loading || state.win || state.error;
       const elapsed = shouldNotTick ? 0 : action.payload - state.lastTick;
 
-      return {
+      const tickState = {
         ...state,
         msElapsed: state.msElapsed + elapsed,
         lastTick: action.payload,
       };
+
+      saveGame(tickState);
+
+      return tickState;
 
     // -------------------------------------
 
