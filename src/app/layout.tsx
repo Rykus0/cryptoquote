@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import LogoIcon from "@/app/components/icons/LogoIcon";
+import { version } from "../../package.json";
 
 const inter = Inter({ subsets: ["latin"] });
 const domain = "cryptoquote-five.vercel.app";
@@ -42,8 +43,16 @@ export default function RootLayout({
         </header>
         {children}
         <footer>
-          <Link href="/">Play</Link>
-          <Link href="/history">Game History</Link>
+          <div>
+            <Link href="/">Play</Link>
+            <Link href="/history">Game History</Link>
+          </div>
+
+          <div>
+            <a href="https://github.com/Rykus0/cryptoquote/releases/latest">
+              v{version}
+            </a>
+          </div>
         </footer>
       </body>
       <Analytics />
