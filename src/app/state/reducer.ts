@@ -9,35 +9,18 @@ import { normalizeQuote } from "@/utils/formatting";
 import { ActionType, type Action, type State } from "./types";
 import { deleteGame, loadGame, saveGame } from "./storage";
 
-// TODO
-// - Return initial state from a function:
-//   - Check for saved game on load and return state if present
-
-const initialState: State = {
-  cypher: generateCypher(),
+export const initialState: State = {
+  cypher: new Map(),
   answerCypher: new Map(),
   quote: "",
   author: "",
-  loading: false,
+  loading: true,
   error: false,
   win: false,
   completeWithError: false,
   msElapsed: 0,
   lastTick: Date.now(),
 };
-
-export function getInitialState(): State {
-  const gameData = loadGame();
-
-  if (gameData) {
-    return {
-      ...gameData,
-      lastTick: Date.now(),
-    };
-  }
-
-  return initialState;
-}
 
 export default function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -67,12 +50,20 @@ export default function reducer(state: State, action: Action): State {
         answerCypher: createEmptyReverseCypher(cypher),
         quote: action.payload.quote,
         author: action.payload.author,
+        loading: false,
         lastTick: Date.now(),
       };
 
       saveGame(newState);
 
       return newState;
+
+    // -------------------------------------
+
+    case ActionType.LoadGame:
+      const loadState = loadGame();
+
+      return loadState ? { ...loadState, lastTick: Date.now() } : initialState;
 
     // -------------------------------------
 
@@ -86,10 +77,7 @@ export default function reducer(state: State, action: Action): State {
     // -------------------------------------
 
     case ActionType.Loading:
-      return {
-        ...initialState,
-        loading: true,
-      };
+      return initialState;
 
     // -------------------------------------
 
@@ -143,6 +131,8 @@ export default function reducer(state: State, action: Action): State {
 
   return state;
 }
+
+// -------------------------------------
 
 function isWin(state: State, newAnswer: Cypher) {
   const encryptedQuote = applyCypher(normalizeQuote(state.quote), state.cypher);
