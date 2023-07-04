@@ -1,0 +1,21 @@
+.history {
+  caption-side: bottom;
+  width: 100%;
+}
+
+.history > thead > tr > th {
+  text-align: start;
+}
+
+.history td,
+.history th {
+  white-space: nowrap;
+  padding: 0.25em 0.5em;
+}
+
+.history > tbody > tr > td:first-child {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+  max-width: 0;
+}
