@@ -55,7 +55,7 @@ type HistoricalGame = {
   date: Date;
 };
 
-type History = HistoricalGame[];
+export type GameHistory = HistoricalGame[];
 
 export function addHistory(data: HistoricalGame) {
   try {
@@ -67,7 +67,7 @@ export function addHistory(data: HistoricalGame) {
   }
 }
 
-export function getHistory(): History | null {
+export function getHistory(): GameHistory | null {
   try {
     const data = window.localStorage.getItem(HISTORY_KEY);
 
