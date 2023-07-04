@@ -41,7 +41,9 @@ export default function RootLayout({
             Cryptoquotle
           </h1>
         </header>
+
         {children}
+
         <footer>
           <div>
             <Link href="/">Play</Link>
