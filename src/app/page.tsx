@@ -8,7 +8,7 @@ import {
   type ChangeEvent,
   type Reducer,
 } from "react";
-import reducer, { getInitialState } from "@/app/state/reducer";
+import reducer, { initialState } from "@/app/state/reducer";
 import { ActionType, type Action, type State } from "@/app/state/types";
 import { loadGame } from "@/app/state/storage";
 import Button from "@/app/components/Button";
@@ -40,12 +40,13 @@ async function getQuote() {
 export default function Home() {
   const [state, dispatch] = useReducer<Reducer<State, Action>>(
     reducer,
-    getInitialState()
+    initialState
   );
   const timer = useRef<ReturnType<typeof setInterval>>();
 
   async function newGame() {
     dispatch({ type: ActionType.Loading });
+
     const quoteData = await getQuote();
 
     if (quoteData) {
@@ -88,7 +89,9 @@ export default function Home() {
   }, [tick]);
 
   useEffect(() => {
-    if (!loadGame()) {
+    if (loadGame()) {
+      dispatch({ type: ActionType.LoadGame });
+    } else {
       (async function start() {
         await newGame();
       })();

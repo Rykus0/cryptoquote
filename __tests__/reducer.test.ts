@@ -1,6 +1,6 @@
-import reducer, { getInitialState } from "../src/app/state/reducer";
+import reducer, { initialState } from "../src/app/state/reducer";
 import { ActionType } from "../src/app/state/types";
-import { deleteGame, loadGame } from "../src/app/state/storage";
+import { deleteGame } from "../src/app/state/storage";
 import { applyCypher } from "../src/utils/cypher";
 
 describe("Reducer", () => {
@@ -11,7 +11,7 @@ describe("Reducer", () => {
   describe("Tick", () => {
     it("should update the state's msElapsed and lastTick properties", () => {
       const interimState = reducer(
-        { ...getInitialState(), lastTick: 0 },
+        { ...initialState, loading: false, lastTick: 0 },
         {
           type: ActionType.Tick,
           payload: 1000,
@@ -23,7 +23,8 @@ describe("Reducer", () => {
       });
 
       expect(state).toEqual({
-        ...getInitialState(),
+        ...initialState,
+        loading: false,
         msElapsed: 2000,
         lastTick: 2000,
       });
@@ -31,7 +32,7 @@ describe("Reducer", () => {
 
     it("should not update the timer while the document is hidden", () => {
       const interimState = reducer(
-        { ...getInitialState(), lastTick: 0 },
+        { ...initialState, loading: false, lastTick: 0 },
         {
           type: ActionType.Tick,
           payload: 1000,
@@ -46,7 +47,8 @@ describe("Reducer", () => {
       });
 
       expect(state).toEqual({
-        ...getInitialState(),
+        ...initialState,
+        loading: false,
         msElapsed: 1000,
         lastTick: 2000,
       });
@@ -60,7 +62,7 @@ describe("Reducer", () => {
     jest.spyOn(Date, "now").mockReturnValue(1000);
     jest.spyOn(Storage.prototype, "setItem");
 
-    const state = reducer(getInitialState(), {
+    const state = reducer(initialState, {
       type: ActionType.NewGame,
       payload: {
         quote,
@@ -114,7 +116,7 @@ describe("Reducer", () => {
 
       const state = reducer(
         {
-          ...getInitialState(),
+          ...initialState,
           cypher: cypher,
           answerCypher: new Map([["b", "a"]]),
         },
@@ -122,7 +124,7 @@ describe("Reducer", () => {
       );
 
       expect(state).toEqual({
-        ...getInitialState(),
+        ...initialState,
         cypher: cypher,
         answerCypher: new Map([
           ["b", ""],
@@ -134,9 +136,9 @@ describe("Reducer", () => {
 
   describe("Loading", () => {
     it("should set the loading state", () => {
-      const state = reducer(getInitialState(), { type: ActionType.Loading });
+      const state = reducer(initialState, { type: ActionType.Loading });
 
-      expect(state).toEqual({ ...getInitialState(), loading: true });
+      expect(state).toEqual({ ...initialState, loading: true });
     });
   });
 
@@ -145,7 +147,7 @@ describe("Reducer", () => {
     jest.spyOn(Storage.prototype, "removeItem");
 
     it("should map the encoded letter to the given one in the answer cypher", () => {
-      const state = reducer(getInitialState(), {
+      const state = reducer(initialState, {
         type: ActionType.SetAnswer,
         payload: { encoded: "a", decoded: "b" },
       });
@@ -156,7 +158,7 @@ describe("Reducer", () => {
     it("should clear any existing cypher values for the given decoded letter", () => {
       const state = reducer(
         {
-          ...getInitialState(),
+          ...initialState,
           answerCypher: new Map([
             ["a", "c"],
             ["b", ""],
@@ -174,7 +176,7 @@ describe("Reducer", () => {
     it("should not update state if the game is already won", () => {
       const state = reducer(
         {
-          ...getInitialState(),
+          ...initialState,
           answerCypher: new Map([["a", "c"]]),
           win: true,
         },
@@ -190,7 +192,7 @@ describe("Reducer", () => {
     it("should update the win state if the answer solves the cypher", () => {
       const state = reducer(
         {
-          ...getInitialState(),
+          ...initialState,
           quote: "c",
           author: "d",
           cypher: new Map([
@@ -214,7 +216,7 @@ describe("Reducer", () => {
     it("should not be case sensitive when determining the win condition", () => {
       const state = reducer(
         {
-          ...getInitialState(),
+          ...initialState,
           quote: "c",
           author: "d",
           cypher: new Map([
@@ -238,7 +240,7 @@ describe("Reducer", () => {
     it("should not update the win state if the answer does not solve the cypher", () => {
       const state = reducer(
         {
-          ...getInitialState(),
+          ...initialState,
           quote: "c",
           author: "d",
           cypher: new Map([
@@ -262,7 +264,7 @@ describe("Reducer", () => {
     it("should indicate if comlpete with mistakes", () => {
       const state = reducer(
         {
-          ...getInitialState(),
+          ...initialState,
           quote: "c",
           author: "d",
           cypher: new Map([
@@ -284,7 +286,7 @@ describe("Reducer", () => {
     });
 
     it("should save game state after a non-winning answer", () => {
-      reducer(getInitialState(), {
+      reducer(initialState, {
         type: ActionType.SetAnswer,
         payload: { encoded: "a", decoded: "b" },
       });
@@ -295,7 +297,7 @@ describe("Reducer", () => {
     it("should clear game state on a win", () => {
       reducer(
         {
-          ...getInitialState(),
+          ...initialState,
           quote: "c",
           author: "d",
           cypher: new Map([
@@ -325,7 +327,7 @@ describe("Reducer", () => {
       ]);
       const state = reducer(
         {
-          ...getInitialState(),
+          ...initialState,
           cypher: cypher,
         },
         {
@@ -334,7 +336,7 @@ describe("Reducer", () => {
       );
 
       expect(state).toEqual({
-        ...getInitialState(),
+        ...initialState,
         cypher: cypher,
         answerCypher: new Map([
           ["b", "a"],
