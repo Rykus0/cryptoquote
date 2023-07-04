@@ -1,7 +1,8 @@
 import "./globals.css";
-import LogoIcon from "@/app/components/icons/LogoIcon";
+import Link from "next/link";
 import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+import LogoIcon from "@/app/components/icons/LogoIcon";
 
 const inter = Inter({ subsets: ["latin"] });
 const domain = "cryptoquote-five.vercel.app";
@@ -40,6 +41,10 @@ export default function RootLayout({
           </h1>
         </header>
         {children}
+        <footer>
+          <Link href="/">Play</Link>
+          <Link href="/history">Game History</Link>
+        </footer>
       </body>
       <Analytics />
     </html>

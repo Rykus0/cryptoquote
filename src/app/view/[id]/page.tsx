@@ -38,9 +38,6 @@ export default async function View(props: ViewProps) {
   return (
     <main>
       <Quote quote={content} author={author} />
-      <p>
-        <Link href="/">Play</Link>
-      </p>
     </main>
   );
 }
