@@ -7,7 +7,7 @@ import {
 } from "@/utils/cypher";
 import { normalizeQuote } from "@/utils/formatting";
 import { ActionType, type Action, type State } from "./types";
-import { deleteGame, loadGame, saveGame } from "./storage";
+import { deleteGame, loadGame, saveGame, addHistory } from "./storage";
 
 export const initialState: State = {
   cypher: new Map(),
@@ -111,6 +111,14 @@ export default function reducer(state: State, action: Action): State {
 
       if (answerState.win) {
         deleteGame();
+        addHistory({
+          id: state.id,
+          quote: state.quote,
+          author: state.author,
+          msElapsed: state.msElapsed,
+          win: true,
+          date: new Date(),
+        });
       } else {
         saveGame(answerState);
       }
@@ -121,6 +129,14 @@ export default function reducer(state: State, action: Action): State {
 
     case ActionType.GiveUp:
       deleteGame();
+      addHistory({
+        id: state.id,
+        quote: state.quote,
+        author: state.author,
+        msElapsed: state.msElapsed,
+        win: false,
+        date: new Date(),
+      });
 
       return {
         ...state,
