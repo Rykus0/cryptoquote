@@ -16,6 +16,7 @@ export type State = {
 export enum ActionType {
   Clear = "clear",
   NewGame = "newGame",
+  LoadGame = "loadGame",
   GiveUp = "giveUp",
   Loading = "loading",
   LoadError = "loadError",
@@ -29,6 +30,7 @@ export type Action =
       type: ActionType.NewGame;
       payload: { quote: string; author: string };
     }
+  | { type: ActionType.LoadGame }
   | { type: ActionType.GiveUp }
   | { type: ActionType.Loading }
   | { type: ActionType.LoadError }
