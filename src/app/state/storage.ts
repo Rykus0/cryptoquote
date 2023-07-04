@@ -61,7 +61,7 @@ export function addHistory(data: HistoricalGame) {
   try {
     const history = getHistory() ?? [];
     history.unshift(data);
-    window.localStorage.setItem(HISTORY_KEY, JSON.stringify(data));
+    window.localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
   } catch (error) {
     console.error(error);
   }
