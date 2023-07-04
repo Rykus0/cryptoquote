@@ -19,7 +19,7 @@ export function ShareIcon() {
         d="M64 82L64 45.5L64 9M64 9L43.5 29.5M64 9L84.5 29.5"
         stroke="currentColor"
         strokeWidth="10"
-        stroke-linejoin="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
