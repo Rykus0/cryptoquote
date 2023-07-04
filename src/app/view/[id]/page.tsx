@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Quote from "@/app/components/Quote";
 
 type ViewParams = {
