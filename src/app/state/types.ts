@@ -3,6 +3,7 @@ import { type Cypher } from "@/utils/cypher";
 export type State = {
   cypher: Cypher;
   answerCypher: Cypher;
+  id: string;
   quote: string;
   author: string;
   loading: boolean;
@@ -28,7 +29,7 @@ export type Action =
   | { type: ActionType.Clear }
   | {
       type: ActionType.NewGame;
-      payload: { quote: string; author: string };
+      payload: { id: string; quote: string; author: string };
     }
   | { type: ActionType.LoadGame }
   | { type: ActionType.GiveUp }

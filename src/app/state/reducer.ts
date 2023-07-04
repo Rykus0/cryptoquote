@@ -12,6 +12,7 @@ import { deleteGame, loadGame, saveGame } from "./storage";
 export const initialState: State = {
   cypher: new Map(),
   answerCypher: new Map(),
+  id: "",
   quote: "",
   author: "",
   loading: true,
@@ -46,10 +47,9 @@ export default function reducer(state: State, action: Action): State {
 
       const newState = {
         ...initialState,
+        ...action.payload,
         cypher: cypher,
         answerCypher: createEmptyReverseCypher(cypher),
-        quote: action.payload.quote,
-        author: action.payload.author,
         loading: false,
         lastTick: Date.now(),
       };
