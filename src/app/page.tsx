@@ -27,6 +27,7 @@ async function getQuote() {
     const data = await response.json();
 
     return {
+      id: data._id,
       quote: data.content,
       author: data.author,
     };
