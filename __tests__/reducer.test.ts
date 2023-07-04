@@ -65,6 +65,7 @@ describe("Reducer", () => {
     const state = reducer(initialState, {
       type: ActionType.NewGame,
       payload: {
+        id: "test",
         quote,
         author,
       },
