@@ -9,49 +9,117 @@ describe("Reducer", () => {
   });
 
   describe("Tick", () => {
-    it("should update the state's msElapsed and lastTick properties", () => {
-      const interimState = reducer(
-        { ...initialState, loading: false, lastTick: 0 },
-        {
-          type: ActionType.Tick,
-          payload: 1000,
-        }
-      );
-      const state = reducer(interimState, {
-        type: ActionType.Tick,
-        payload: 2000,
-      });
+    jest.useFakeTimers();
 
-      expect(state).toEqual({
-        ...initialState,
-        loading: false,
-        msElapsed: 2000,
-        lastTick: 2000,
-      });
+    it("should update the state's msElapsed and lastTick properties", () => {
+      jest.advanceTimersByTime(1000);
+      const state = reducer(
+        { ...initialState, loading: false, lastTick: 0 },
+        { type: ActionType.Tick }
+      );
+
+      expect(state.msElapsed).toBe(1000);
+      expect(state.lastTick).toBe(1000);
     });
 
-    it("should not update the timer while the document is hidden", () => {
-      const interimState = reducer(
+    it("should never increment by more than 1 second", () => {
+      jest.advanceTimersByTime(10000);
+      const state = reducer(
         { ...initialState, loading: false, lastTick: 0 },
-        {
-          type: ActionType.Tick,
-          payload: 1000,
-        }
+        { type: ActionType.Tick }
       );
 
+      expect(state.msElapsed).toBe(1000);
+    });
+
+    it("should not update the elapsed time while the document is hidden", () => {
+      jest.advanceTimersByTime(1000);
       jest.spyOn(document, "hidden", "get").mockReturnValue(true);
 
-      const state = reducer(interimState, {
-        type: ActionType.Tick,
-        payload: 2000,
-      });
+      const state = reducer(
+        { ...initialState, loading: false, lastTick: 0 },
+        { type: ActionType.Tick }
+      );
 
-      expect(state).toEqual({
-        ...initialState,
-        loading: false,
-        msElapsed: 1000,
-        lastTick: 2000,
-      });
+      expect(state.msElapsed).toBe(initialState.msElapsed);
+    });
+
+    it("should update the last tick while the document is hidden", () => {
+      jest.advanceTimersByTime(1000);
+      jest.spyOn(document, "hidden", "get").mockReturnValue(true);
+
+      const state = reducer(
+        { ...initialState, loading: false, lastTick: 0 },
+        { type: ActionType.Tick }
+      );
+
+      expect(state.lastTick).toBe(1000);
+    });
+
+    it("should not update the elapsed time while loading", () => {
+      jest.advanceTimersByTime(1000);
+
+      const state = reducer(
+        { ...initialState, lastTick: 0 },
+        { type: ActionType.Tick }
+      );
+
+      expect(state.msElapsed).toBe(initialState.msElapsed);
+    });
+
+    it("should update the last tick while loading", () => {
+      jest.advanceTimersByTime(1000);
+
+      const state = reducer(
+        { ...initialState, lastTick: 0 },
+        { type: ActionType.Tick }
+      );
+
+      expect(state.lastTick).toBe(1000);
+    });
+
+    it("should not update the elapsed time after winning", () => {
+      jest.advanceTimersByTime(1000);
+
+      const state = reducer(
+        { ...initialState, loading: false, win: true, lastTick: 0 },
+        { type: ActionType.Tick }
+      );
+
+      expect(state.msElapsed).toBe(initialState.msElapsed);
+    });
+
+    it("should update the last tick after winning", () => {
+      jest.advanceTimersByTime(1000);
+
+      const state = reducer(
+        { ...initialState, loading: false, win: true, lastTick: 0 },
+        { type: ActionType.Tick }
+      );
+
+      expect(state.lastTick).toBe(1000);
+    });
+
+    it("should not update the elapsed time while there is an error", () => {
+      jest.advanceTimersByTime(1000);
+
+      const state = reducer(
+        { ...initialState, loading: false, error: true, lastTick: 0 },
+        { type: ActionType.Tick }
+      );
+
+      expect(state.msElapsed).toBe(initialState.msElapsed);
+    });
+
+    it("should update the last tick while the document is hidden", () => {
+      jest.advanceTimersByTime(1000);
+
+      const state = reducer(
+        { ...initialState, loading: false, error: true, lastTick: 0 },
+        { type: ActionType.Tick }
+      );
+
+      expect(state.lastTick).toBe(1000);
     });
   });
 

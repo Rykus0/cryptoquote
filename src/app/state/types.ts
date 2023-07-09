@@ -39,4 +39,4 @@ export type Action =
       type: ActionType.SetAnswer;
       payload: { encoded: string; decoded: string };
     }
-  | { type: ActionType.Tick; payload: number };
+  | { type: ActionType.Tick };
