@@ -26,14 +26,12 @@ export const initialState: State = {
 export default function reducer(state: State, action: Action): State {
   switch (action.type) {
     case ActionType.Tick:
-      const shouldNotTick =
-        document.hidden || state.loading || state.win || state.error;
-      const elapsed = shouldNotTick ? 0 : action.payload - state.lastTick;
+      const currentMs = Date.now();
 
       const tickState = {
         ...state,
-        msElapsed: state.msElapsed + elapsed,
-        lastTick: action.payload,
+        msElapsed: state.msElapsed + getElapsedMs(state, currentMs),
+        lastTick: currentMs,
       };
 
       saveGame(tickState);
@@ -181,4 +179,20 @@ function isCompleteWithError(state: State, newAnswer: Cypher) {
 
 function createEmptyReverseCypher(cypher: Cypher) {
   return new Map(Array.from(cypher.values()).map((v) => [v, ""]));
+}
+
+function getElapsedMs(state: State, currentMs: number) {
+  const shouldNotTick =
+    document.hidden || state.loading || state.win || state.error;
+  const elapsed = currentMs - state.lastTick;
+
+  if (shouldNotTick || elapsed < 0) {
+    return 0;
+  }
+
+  if (elapsed > 1000) {
+    return 1000;
+  }
+
+  return elapsed;
 }

@@ -77,7 +77,7 @@ export default function Home() {
 
   useEffect(() => {
     function tick() {
-      dispatch({ type: ActionType.Tick, payload: Date.now() });
+      dispatch({ type: ActionType.Tick });
     }
 
     timer.current = setInterval(tick, 100);
