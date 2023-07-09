@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  useCallback,
   useEffect,
   useReducer,
   useRef,
@@ -76,18 +75,18 @@ export default function Home() {
     }
   }
 
-  const tick = useCallback(() => {
-    dispatch({ type: ActionType.Tick, payload: Date.now() });
-  }, []);
-
   useEffect(() => {
+    function tick() {
+      dispatch({ type: ActionType.Tick, payload: Date.now() });
+    }
+
     timer.current = setInterval(tick, 100);
 
     return () => {
       window.clearInterval(timer.current);
       timer.current = undefined;
     };
-  }, [tick]);
+  }, []);
 
   useEffect(() => {
     if (loadGame()) {
